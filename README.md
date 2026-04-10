@@ -6,24 +6,13 @@
 <title>OptiMod Pro 1600 - Broadcast Audio Processor</title>
 <style>
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-panel: #141414;
-  --border-color: #333;
-  --text-primary: #e0e0e0;
-  --text-secondary: #888;
-  --accent-amber: #ffb700;
-  --accent-green: #39ff14;
-  --accent-red: #ff3333;
-  --knob-size: 52px;
-  --knob-small: 38px;
-  --fader-height: 120px;
+  --bg-primary: #0a0a0a; --bg-secondary: #1a1a1a; --bg-panel: #141414; --border-color: #333;
+  --text-primary: #e0e0e0; --text-secondary: #888;
+  --accent-amber: #ffb700; --accent-green: #39ff14; --accent-red: #ff3333;
+  --knob-size: 52px; --knob-small: 38px; --fader-height: 120px;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; }
-
 .header { background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 2px solid var(--accent-amber); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 20px rgba(255,183,0,0.1); }
 .logo { display: flex; align-items: center; gap: 15px; }
 .logo-icon { width: 50px; height: 50px; background: radial-gradient(circle, var(--accent-amber) 0%, #cc8800 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #000; box-shadow: 0 0 15px rgba(255,183,0,0.4); }
@@ -87,13 +76,9 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
 .mode-selector { display: flex; gap: 4px; justify-content: center; }
 .mode-btn { padding: 6px 16px; background: #1a1a1a; border: 1px solid #333; color: var(--text-secondary); border-radius: 3px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
 .mode-btn.active { background: rgba(255,183,0,0.15); border-color: var(--accent-amber); color: var(--accent-amber); }
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #555; }
+::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg-primary); } ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 @media (max-width: 768px) { .top-section { grid-template-columns: 1fr; } .dsp-row { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 10px; } .knob { --knob-size: 42px; } .knob.small { --knob-small: 32px; } }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-.processing-active { animation: pulse 2s infinite; }
 .tooltip { position: absolute; background: rgba(0,0,0,0.9); border: 1px solid var(--accent-amber); color: var(--text-primary); padding: 4px 8px; border-radius: 4px; font-size: 10px; pointer-events: none; z-index: 100; display: none; white-space: nowrap; }
 .gr-meter { width: 100%; height: 8px; background: #111; border-radius: 4px; overflow: hidden; margin-top: 4px; }
 .gr-meter-fill { height: 100%; background: linear-gradient(90deg, var(--accent-green), #ffcc00, #ff0000); width: 0%; transition: width 0.05s; border-radius: 4px; }
@@ -109,7 +94,7 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
 .geq-faders::-webkit-scrollbar { height: 4px; }
 .geq-faders::-webkit-scrollbar-track { background: #111; border-radius: 2px; }
 .geq-faders::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
-.geq-channel { display: flex; flex-direction: column; align-items: center; min-width: 28px; flex-shrink: 0; }
+.geq-channel { display: flex; flex-direction: column; align-items: center; min-width: 30px; flex-shrink: 0; }
 .geq-value { font-size: 8px; color: var(--accent-green); font-family: 'Courier New', monospace; font-weight: bold; height: 12px; margin-bottom: 2px; text-align: center; white-space: nowrap; }
 .geq-fader-track { position: relative; width: 16px; height: var(--fader-height); background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%); border-radius: 8px; border: 1px solid #333; cursor: pointer; touch-action: none; }
 .geq-fader-track::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: linear-gradient(180deg, var(--accent-green) 0%, var(--accent-green) 45%, var(--accent-amber) 48%, var(--accent-amber) 52%, var(--accent-green) 55%, var(--accent-green) 100%); transform: translateX(-50%); opacity: 0.3; border-radius: 1px; }
@@ -162,18 +147,18 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
     <div class="panel"><div class="panel-title">📤 Output</div><div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="outputGain" data-min="-24" data-max="12" data-default="0"><div class="knob"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Gain</div></div><div class="knob-container"><div class="knob-wrapper" data-param="outputLimit" data-min="0" data-max="100" data-default="100"><div class="knob"></div></div><div class="knob-value">100%</div><div class="knob-label">Limit</div></div><div class="knob-container"><div class="knob-wrapper" data-param="stereoMode" data-min="0" data-max="2" data-default="0"><div class="knob small"></div></div><div class="knob-value">ST</div><div class="knob-label">Stereo</div></div></div></div>
   </div>
   <div class="panel spectrum-panel"><div class="panel-title">📈 Spectrum Analyzer</div><canvas class="spectrum-canvas" id="spectrumCanvas"></canvas></div>
-  
+
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 31 Bandas<button class="bypass-btn active" data-module="geq">ACTIVE</button><button class="geq-reset-btn" id="geqResetBtn">↺ Reset</button></div><canvas class="eq-display" id="eqCanvas"></canvas><div class="geq-container"><div class="geq-faders" id="geqFaders"></div></div></div>
-  
+
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Compresor<button class="bypass-btn active" data-module="compressor">ACTIVE</button></div>
     <div class="comp-io-meters">
       <div class="io-meter"><div class="io-label">📥 Input R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="compInFillL"></div><div class="mini-peak" id="compInPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="compInFillR"></div><div class="mini-peak" id="compInPeakR"></div></div></div><div class="io-level" id="compInLevel">L: 0.0 dB | R: 0.0 dB</div></div>
       <div class="io-meter"><div class="io-label">📤 Output R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="compOutFillL"></div><div class="mini-peak" id="compOutPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="compOutFillR"></div><div class="mini-peak" id="compOutPeakR"></div></div></div><div class="io-level" id="compOutLevel">L: 0.0 dB | R: 0.0 dB</div></div>
     </div><div class="knobs-grid" id="compressorKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="compGrMeter"></div></div>
   </div>
-  
+
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Limiter Final<button class="bypass-btn active" data-module="finalLimiter">ACTIVE</button></div><div class="knobs-grid" id="finalLimiterKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="limGrMeter"></div></div></div>
-  
+
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Dinámico<button class="bypass-btn active" data-module="dynamicEQ">ACTIVE</button></div>
     <div class="comp-io-meters">
       <div class="io-meter"><div class="io-label">📥 Input R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="dynEqInFillL"></div><div class="mini-peak" id="dynEqInPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="dynEqInFillR"></div><div class="mini-peak" id="dynEqInPeakR"></div></div></div><div class="io-level" id="dynEqInLevel">L: 0.0 dB | R: 0.0 dB</div></div>
@@ -181,17 +166,17 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
     </div><div class="knobs-grid" id="dynamicEQKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="dynEqGrMeter"></div></div>
   </div>
 
-  <!-- ECUALIZADOR GRÁFICO 6 BANDAS (Reemplaza Pre-Emphasis) -->
+  <!-- ECUALIZADOR GRÁFICO 16 BANDAS -->
   <div class="dsp-panel">
-    <div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 6 Bandas<button class="bypass-btn active" data-module="geq6">ACTIVE</button><button class="geq-reset-btn" id="geq6ResetBtn">↺ Reset</button></div>
+    <div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 16 Bandas<button class="bypass-btn active" data-module="geq16">ACTIVE</button><button class="geq-reset-btn" id="geq16ResetBtn">↺ Reset</button></div>
     <div class="comp-io-meters">
-      <div class="io-meter"><div class="io-label">📥 Input R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="geq6InFillL"></div><div class="mini-peak" id="geq6InPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="geq6InFillR"></div><div class="mini-peak" id="geq6InPeakR"></div></div></div><div class="io-level" id="geq6InLevel">L: 0.0 dB | R: 0.0 dB</div></div>
-      <div class="io-meter"><div class="io-label">📤 Output R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="geq6OutFillL"></div><div class="mini-peak" id="geq6OutPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="geq6OutFillR"></div><div class="mini-peak" id="geq6OutPeakR"></div></div></div><div class="io-level" id="geq6OutLevel">L: 0.0 dB | R: 0.0 dB</div></div>
+      <div class="io-meter"><div class="io-label">📥 Input R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="geq16InFillL"></div><div class="mini-peak" id="geq16InPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="geq16InFillR"></div><div class="mini-peak" id="geq16InPeakR"></div></div></div><div class="io-level" id="geq16InLevel">L: 0.0 dB | R: 0.0 dB</div></div>
+      <div class="io-meter"><div class="io-label">📤 Output R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="geq16OutFillL"></div><div class="mini-peak" id="geq16OutPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="geq16OutFillR"></div><div class="mini-peak" id="geq16OutPeakR"></div></div></div><div class="io-level" id="geq16OutLevel">L: 0.0 dB | R: 0.0 dB</div></div>
     </div>
-    <div class="geq-container"><div class="geq-faders" id="geq6Faders"></div></div>
-    <div class="gr-meter"><div class="gr-meter-fill" id="geq6GrMeter"></div></div>
+    <div class="geq-container"><div class="geq-faders" id="geq16Faders"></div></div>
+    <div class="gr-meter"><div class="gr-meter-fill" id="geq16GrMeter"></div></div>
   </div>
-  
+
   <div class="dsp-panel">
     <div class="dsp-panel-title"><span class="status-dot"></span>Stereo Mode</div>
     <div class="mode-selector" style="margin-bottom:10px;"><button class="mode-btn active" data-mode="stereo">Stereo</button><button class="mode-btn" data-mode="mono">Mono</button><button class="mode-btn" data-mode="mpx">MPX</button></div>
@@ -212,13 +197,13 @@ class BroadcastProcessor {
     this.peakHold = { inputL: 0, inputR: 0, outputL: 0, outputR: 0 };
     this.compMeters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
     this.dynEqMeters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
-    this.geq6Meters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
+    this.geq16Meters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
     this.spectrumData = new Float32Array(128); this.eqData = new Float32Array(128);
     this.clipped = false; this.cpuLoad = 0; this.lastFrameTime = performance.now(); this.frameCount = 0;
     this.geqFrequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
-    // Frecuencias del GEQ 6 bandas
-    this.geq6Frequencies = [60, 250, 1000, 3500, 8000, 14000];
-    this.initDefaultParams(); this.initUI(); this.initBypassButtons(); this.initKnobs(); this.initGEQFaders(); this.initGEQ6Faders(); this.initSpectrum(); this.initEQDisplay(); this.loadPreset('fm-hot');
+    // Frecuencias del GEQ 16 bandas - ISO broadcast
+    this.geq16Frequencies = [31.5, 63, 125, 250, 500, 1000, 1500, 2000, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000];
+    this.initDefaultParams(); this.initUI(); this.initBypassButtons(); this.initKnobs(); this.initGEQFaders(); this.initGEQ16Faders(); this.initSpectrum(); this.initEQDisplay(); this.loadPreset('fm-hot');
   }
 
   initDefaultParams() {
@@ -229,8 +214,8 @@ class BroadcastProcessor {
     this.params.finalLimiter = { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true };
     this.params.dynamicEQ = { threshold: -20, ratio: 2, attack: 10, release: 100, gain: 0, enabled: true };
     this.params.dynamicEQMaster = { enabled: true };
-    // GEQ 6 bandas
-    this.params.geq6 = new Float32Array(6); this.params.geq6Master = { enabled: true };
+    // GEQ 16 bandas
+    this.params.geq16 = new Float32Array(16); this.params.geq16Master = { enabled: true };
     this.params.outputGain = 0; this.params.outputLimit = 100; this.params.stereoMode = 0;
     this.params.stereoWidth = 100; this.params.stereoBalance = 0;
     this.params.mode = 'streaming';
@@ -252,7 +237,7 @@ class BroadcastProcessor {
         if (e.data.type === 'meters') { this.meters = e.data.meters; this.updateMeters(); }
         if (e.data.type === 'compMeters') { this.compMeters = e.data.compMeters; this.updateCompMeters(); }
         if (e.data.type === 'dynEqMeters') { this.dynEqMeters = e.data.dynEqMeters; this.updateDynEqMeters(); }
-        if (e.data.type === 'geq6Meters') { this.geq6Meters = e.data.geq6Meters; this.updateGeq6Meters(); }
+        if (e.data.type === 'geq16Meters') { this.geq16Meters = e.data.geq16Meters; this.updateGeq16Meters(); }
         if (e.data.type === 'spectrum') { this.spectrumData = new Float32Array(e.data.spectrum); this.drawSpectrum(); }
         if (e.data.type === 'eqcurve') { this.eqData = new Float32Array(e.data.eqcurve); this.drawEQCurve(); }
         if (e.data.type === 'gr') this.updateGRMeters(e.data.gr);
@@ -275,19 +260,19 @@ class BroadcastProcessor {
     class BroadcastProcessor extends AudioWorkletProcessor {
       constructor(options) {
         super(); this.sampleRate = options.sampleRate || 48000;
-        this.geqMasterEnabled = true; this.compressorEnabled = true; this.finalLimiterEnabled = true; this.dynamicEQEnabled = true; this.geq6Enabled = true;
+        this.geqMasterEnabled = true; this.compressorEnabled = true; this.finalLimiterEnabled = true; this.dynamicEQEnabled = true; this.geq16Enabled = true;
         this.inputGain = 1.0; this.inputPan = 0.0; this.outputGain = 1.0; this.stereoWidth = 1.0; this.stereoBalance = 0.0; this.stereoMode = 0;
         this.geqFrequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
         this.geqGains = new Float32Array(31); this.geqQ = 4.318; this.geqFilters = []; this.initGEQ();
-        this.geq6Frequencies = [60,250,1000,3500,8000,14000];
-        this.geq6Gains = new Float32Array(6); this.geq6Q = 2.0; this.geq6Filters = []; this.initGEQ6();
+        this.geq16Frequencies = [31.5,63,125,250,500,1000,1500,2000,3150,4000,5000,6300,8000,10000,12500,16000];
+        this.geq16Gains = new Float32Array(16); this.geq16Q = 2.5; this.geq16Filters = []; this.initGEQ16();
         this.compressor = { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, envelope: 0, g: 1.0 };
         this.finalLimiter = {threshold:-1,ratio:20,attack:0.5,release:50,gain:0,envelope:0,g:1.0};
         this.dynamicEQ = {threshold:-20,ratio:2,attack:10,release:100,gain:0,envelope:0,g:1.0};
         this.meterInputL = 0; this.meterInputR = 0; this.meterOutputL = 0; this.meterOutputR = 0; this.meterPeakIL = 0; this.meterPeakIR = 0; this.meterPeakOL = 0; this.meterPeakOR = 0;
         this.compInL=0;this.compInR=0;this.compOutL=0;this.compOutR=0;this.compPeakIL=0;this.compPeakIR=0;this.compPeakOL=0;this.compPeakOR=0;this.compGR=0;
         this.dynEqInL=0;this.dynEqInR=0;this.dynEqOutL=0;this.dynEqOutR=0;this.dynEqPeakIL=0;this.dynEqPeakIR=0;this.dynEqPeakOL=0;this.dynEqPeakOR=0;this.dynEqGR=0;
-        this.geq6InL=0;this.geq6InR=0;this.geq6OutL=0;this.geq6OutR=0;this.geq6PeakIL=0;this.geq6PeakIR=0;this.geq6PeakOL=0;this.geq6PeakOR=0;this.geq6GR=0;
+        this.geq16InL=0;this.geq16InR=0;this.geq16OutL=0;this.geq16OutR=0;this.geq16PeakIL=0;this.geq16PeakIR=0;this.geq16PeakOL=0;this.geq16PeakOR=0;this.geq16GR=0;
         this.spectrumBuffer = new Float32Array(256); this.spectrumIdx = 0; this.saturationAmount = 0.1; this.antiClipEnabled = true;
         this.meterUpdateInterval = Math.floor(this.sampleRate / 30); this.frameCounter = 0;
         this.port.onmessage = (e) => this.handleMessage(e.data);
@@ -295,17 +280,17 @@ class BroadcastProcessor {
       initGEQ() { this.geqFilters = []; for (let i = 0; i < 31; i++) { this.geqFilters.push({ freq:this.geqFrequencies[i], gain:0, q:this.geqQ, b0:0,b1:0,b2:0,a1:0,a2:0, x1L:0,x2L:0,y1L:0,y2L:0, x1R:0,x2R:0,y1R:0,y2R:0 }); this.updateGEQCoeffs(i); } }
       updateGEQCoeffs(index) { const f=this.geqFilters[index]; const sr=this.sampleRate; const freq=Math.max(20,Math.min(20000,f.freq)); const gain=this.geqGains[index]; const q=f.q; const A=Math.pow(10,gain/40); const omega=2*Math.PI*freq/sr; const sinW=Math.sin(omega); const cosW=Math.cos(omega); const alpha=sinW/(2*q); f.b0=(1+alpha*A)/(1+alpha/A); f.b1=-2*cosW/(1+alpha/A); f.b2=(1-alpha*A)/(1+alpha/A); f.a1=-2*cosW/(1+alpha/A); f.a2=(1-alpha/A)/(1+alpha/A); }
       processGEQ(xL,xR){let yL=xL,yR=xR;for(let i=0;i<31;i++){const f=this.geqFilters[i];if(Math.abs(this.geqGains[i])>0.01){const nL=f.b0*yL+f.b1*f.x1L+f.b2*f.x2L-f.a1*f.y1L-f.a2*f.y2L;const nR=f.b0*yR+f.b1*f.x1R+f.b2*f.x2R-f.a1*f.y1R-f.a2*f.y2R;f.x2L=f.x1L;f.x1L=yL;f.y2L=f.y1L;f.y1L=nL;f.x2R=f.x1R;f.x1R=yR;f.y2R=f.y1R;f.y1R=nR;yL=nL;yR=nR;}}return{yL,yR};}
-      initGEQ6() { this.geq6Filters = []; for (let i = 0; i < 6; i++) { this.geq6Filters.push({ freq:this.geq6Frequencies[i], gain:0, q:this.geq6Q, b0:0,b1:0,b2:0,a1:0,a2:0, x1L:0,x2L:0,y1L:0,y2L:0, x1R:0,x2R:0,y1R:0,y2R:0 }); this.updateGEQ6Coeffs(i); } }
-      updateGEQ6Coeffs(index) { const f=this.geq6Filters[index]; const sr=this.sampleRate; const freq=Math.max(20,Math.min(20000,f.freq)); const gain=this.geq6Gains[index]; const q=f.q; const A=Math.pow(10,gain/40); const omega=2*Math.PI*freq/sr; const sinW=Math.sin(omega); const cosW=Math.cos(omega); const alpha=sinW/(2*q); f.b0=(1+alpha*A)/(1+alpha/A); f.b1=-2*cosW/(1+alpha/A); f.b2=(1-alpha*A)/(1+alpha/A); f.a1=-2*cosW/(1+alpha/A); f.a2=(1-alpha/A)/(1+alpha/A); }
-      processGEQ6(xL,xR){let yL=xL,yR=xR;for(let i=0;i<6;i++){const f=this.geq6Filters[i];if(Math.abs(this.geq6Gains[i])>0.01){const nL=f.b0*yL+f.b1*f.x1L+f.b2*f.x2L-f.a1*f.y1L-f.a2*f.y2L;const nR=f.b0*yR+f.b1*f.x1R+f.b2*f.x2R-f.a1*f.y1R-f.a2*f.y2R;f.x2L=f.x1L;f.x1L=yL;f.y2L=f.y1L;f.y1L=nL;f.x2R=f.x1R;f.x1R=yR;f.y2R=f.y1R;f.y1R=nR;yL=nL;yR=nR;}}return{yL,yR};}
-      handleMessage(data){switch(data.type){case'param':this.setParam(data.key,data.value);break;case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;case'geqMaster':this.geqMasterEnabled=data.enabled;break;case'compressor':Object.assign(this.compressor,data.params);break;case'compressorMaster':this.compressorEnabled=data.enabled;break;case'finalLimiter':Object.assign(this.finalLimiter,data.params);break;case'finalLimiterEnabled':this.finalLimiterEnabled=data.enabled;break;case'dynamicEQ':Object.assign(this.dynamicEQ,data.params);break;case'dynamicEQMaster':this.dynamicEQEnabled=data.enabled;break;case'geq6':this.geq6Gains[data.index]=data.value;this.updateGEQ6Coeffs(data.index);break;case'geq6Reset':for(let i=0;i<6;i++){this.geq6Gains[i]=0;this.updateGEQ6Coeffs(i);}break;case'geq6Master':this.geq6Enabled=data.enabled;break;}}
+      initGEQ16() { this.geq16Filters = []; for (let i = 0; i < 16; i++) { this.geq16Filters.push({ freq:this.geq16Frequencies[i], gain:0, q:this.geq16Q, b0:0,b1:0,b2:0,a1:0,a2:0, x1L:0,x2L:0,y1L:0,y2L:0, x1R:0,x2R:0,y1R:0,y2R:0 }); this.updateGEQ16Coeffs(i); } }
+      updateGEQ16Coeffs(index) { const f=this.geq16Filters[index]; const sr=this.sampleRate; const freq=Math.max(20,Math.min(20000,f.freq)); const gain=this.geq16Gains[index]; const q=f.q; const A=Math.pow(10,gain/40); const omega=2*Math.PI*freq/sr; const sinW=Math.sin(omega); const cosW=Math.cos(omega); const alpha=sinW/(2*q); f.b0=(1+alpha*A)/(1+alpha/A); f.b1=-2*cosW/(1+alpha/A); f.b2=(1-alpha*A)/(1+alpha/A); f.a1=-2*cosW/(1+alpha/A); f.a2=(1-alpha/A)/(1+alpha/A); }
+      processGEQ16(xL,xR){let yL=xL,yR=xR;for(let i=0;i<16;i++){const f=this.geq16Filters[i];if(Math.abs(this.geq16Gains[i])>0.01){const nL=f.b0*yL+f.b1*f.x1L+f.b2*f.x2L-f.a1*f.y1L-f.a2*f.y2L;const nR=f.b0*yR+f.b1*f.x1R+f.b2*f.x2R-f.a1*f.y1R-f.a2*f.y2R;f.x2L=f.x1L;f.x1L=yL;f.y2L=f.y1L;f.y1L=nL;f.x2R=f.x1R;f.x1R=yR;f.y2R=f.y1R;f.y1R=nR;yL=nL;yR=nR;}}return{yL,yR};}
+      handleMessage(data){switch(data.type){case'param':this.setParam(data.key,data.value);break;case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;case'geqMaster':this.geqMasterEnabled=data.enabled;break;case'compressor':Object.assign(this.compressor,data.params);break;case'compressorMaster':this.compressorEnabled=data.enabled;break;case'finalLimiter':Object.assign(this.finalLimiter,data.params);break;case'finalLimiterEnabled':this.finalLimiterEnabled=data.enabled;break;case'dynamicEQ':Object.assign(this.dynamicEQ,data.params);break;case'dynamicEQMaster':this.dynamicEQEnabled=data.enabled;break;case'geq16':this.geq16Gains[data.index]=data.value;this.updateGEQ16Coeffs(data.index);break;case'geq16Reset':for(let i=0;i<16;i++){this.geq16Gains[i]=0;this.updateGEQ16Coeffs(i);}break;case'geq16Master':this.geq16Enabled=data.enabled;break;}}
       setParam(key,value){switch(key){case'inputGain':this.inputGain=Math.pow(10,value/20);break;case'inputPan':this.inputPan=value/100;break;case'outputGain':this.outputGain=Math.pow(10,value/20);break;case'outputLimit':this.outputLimit=value/100;break;case'stereoMode':this.stereoMode=value;break;case'stereoWidth':this.stereoWidth=value/100;break;case'stereoBalance':this.stereoBalance=value/100;break;case'saturation':this.saturationAmount=value;break;}}
       compressSample(signal,threshold,ratio,attack,release,envelope,gain){const absSig=Math.abs(signal);const atkCoeff=Math.exp(-1/(attack*0.001*this.sampleRate));const relCoeff=Math.exp(-1/(release*0.001*this.sampleRate));if(absSig>envelope)envelope=atkCoeff*envelope+(1-atkCoeff)*absSig;else envelope=relCoeff*envelope+(1-relCoeff)*absSig;const linThresh=Math.pow(10,threshold/20);if(envelope>linThresh){const overshoot=envelope/linThresh;const logOvershoot=Math.log10(overshoot);const reduction=Math.pow(10,-logOvershoot*(1-1/ratio));gain=Math.min(gain,reduction);}else{const relSlow=Math.exp(-1/(release*3*0.001*this.sampleRate));gain=Math.min(1,gain+(1-gain)*(1-relSlow));}return{envelope,gain,output:signal*gain};}
       applySaturation(x){if(this.saturationAmount<=0)return x;const s=this.saturationAmount;return Math.tanh(x*(1+s))/Math.tanh(1+s);}
       process(inputs,outputs){const input=inputs[0],output=outputs[0];if(!input||!input[0]||!output||!output[0])return true;const inL=input[0],inR=input.length>1?input[1]:input[0];const outL=output[0],outR=output.length>1?output[1]:output[0];const blockSize=inL.length;let clipDetected=false,peakIL=0,peakIR=0,peakOL=0,peakOR=0,rmsIL=0,rmsIR=0,rmsOL=0,rmsOR=0;
       let compPeakIL=0,compPeakIR=0,compPeakOL=0,compPeakOR=0,compRmsIL=0,compRmsIR=0,compRmsOL=0,compRmsOR=0;
       let dynEqPeakIL=0,dynEqPeakIR=0,dynEqPeakOL=0,dynEqPeakOR=0,dynEqRmsIL=0,dynEqRmsIR=0,dynEqRmsOL=0,dynEqRmsOR=0;
-      let geq6PeakIL=0,geq6PeakIR=0,geq6PeakOL=0,geq6PeakOR=0,geq6RmsIL=0,geq6RmsIR=0,geq6RmsOL=0,geq6RmsOR=0;
+      let geq16PeakIL=0,geq16PeakIR=0,geq16PeakOL=0,geq16PeakOR=0,geq16RmsIL=0,geq16RmsIR=0,geq16RmsOL=0,geq16RmsOR=0;
       for(let i=0;i<blockSize;i++){let sL=inL[i],sR=inR[i];peakIL=Math.max(peakIL,Math.abs(sL));peakIR=Math.max(peakIR,Math.abs(sR));rmsIL+=sL*sL;rmsIR+=sR*sR;
       sL*=this.inputGain;sR*=this.inputGain;if(this.inputPan!==0){const pL=Math.cos((this.inputPan+1)*Math.PI/4),pR=Math.sin((this.inputPan+1)*Math.PI/4);sL=sL*pL+sR*(1-Math.abs(pL));sR=sR*pR+sL*(1-Math.abs(pR));}
       if(this.geqMasterEnabled){const eq=this.processGEQ(sL,sR);sL=eq.yL;sR=eq.yR;}
@@ -317,9 +302,9 @@ class BroadcastProcessor {
       dynEqPeakIL=Math.max(dynEqPeakIL,Math.abs(sL));dynEqPeakIR=Math.max(dynEqPeakIR,Math.abs(sR));dynEqRmsIL+=sL*sL;dynEqRmsIR+=sR*sR;
       if(this.dynamicEQEnabled){const d=this.dynamicEQ;const mixed=Math.max(Math.abs(sL),Math.abs(sR));const r=this.compressSample(mixed,d.threshold,d.ratio,d.attack,d.release,this.dynamicEQ.envelope,this.dynamicEQ.g);this.dynamicEQ.envelope=r.envelope;this.dynamicEQ.g=r.gain;const gainFactor=this.dynamicEQ.g*Math.pow(10,d.gain/20);sL*=gainFactor;sR*=gainFactor;}
       dynEqPeakOL=Math.max(dynEqPeakOL,Math.abs(sL));dynEqPeakOR=Math.max(dynEqPeakOR,Math.abs(sR));dynEqRmsOL+=sL*sL;dynEqRmsOR+=sR*sR;this.dynEqGR=20*Math.log10(Math.max(this.dynamicEQ.g,1e-10));
-      geq6PeakIL=Math.max(geq6PeakIL,Math.abs(sL));geq6PeakIR=Math.max(geq6PeakIR,Math.abs(sR));geq6RmsIL+=sL*sL;geq6RmsIR+=sR*sR;
-      if(this.geq6Enabled){const eq6=this.processGEQ6(sL,sR);sL=eq6.yL;sR=eq6.yR;}
-      geq6PeakOL=Math.max(geq6PeakOL,Math.abs(sL));geq6PeakOR=Math.max(geq6PeakOR,Math.abs(sR));geq6RmsOL+=sL*sL;geq6RmsOR+=sR*sR;this.geq6GR=20*Math.log10(Math.max(1,1e-10));
+      geq16PeakIL=Math.max(geq16PeakIL,Math.abs(sL));geq16PeakIR=Math.max(geq16PeakIR,Math.abs(sR));geq16RmsIL+=sL*sL;geq16RmsIR+=sR*sR;
+      if(this.geq16Enabled){const eq16=this.processGEQ16(sL,sR);sL=eq16.yL;sR=eq16.yR;}
+      geq16PeakOL=Math.max(geq16PeakOL,Math.abs(sL));geq16PeakOR=Math.max(geq16PeakOR,Math.abs(sR));geq16RmsOL+=sL*sL;geq16RmsOR+=sR*sR;this.geq16GR=0;
       if(this.antiClipEnabled){const mx=Math.max(Math.abs(sL),Math.abs(sR));if(mx>1){sL/=mx;sR/=mx;clipDetected=true;}}else{if(Math.abs(sL)>1){sL=Math.sign(sL);clipDetected=true;}if(Math.abs(sR)>1){sR=Math.sign(sR);clipDetected=true;}}
       if(this.stereoMode===1){const m=(sL+sR)/2;sL=m;sR=m;}else if(this.stereoMode===2){const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}else{const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}
       if(this.stereoBalance!==0){if(this.stereoBalance>0)sR*=(1-this.stereoBalance);else sL*=(1+this.stereoBalance);}
@@ -331,8 +316,8 @@ class BroadcastProcessor {
       this.frameCounter+=blockSize;if(this.frameCounter>=this.meterUpdateInterval){this.frameCounter=0;const rmsToDb=(rms,n)=>20*Math.log10(Math.max(Math.sqrt(rms/n),1e-10));this.meterInputL=rmsToDb(rmsIL,blockSize);this.meterInputR=rmsToDb(rmsIR,blockSize);this.meterOutputL=rmsToDb(rmsOL,blockSize);this.meterOutputR=rmsToDb(rmsOR,blockSize);this.meterPeakIL=20*Math.log10(Math.max(peakIL,1e-10));this.meterPeakIR=20*Math.log10(Math.max(peakIR,1e-10));this.meterPeakOL=20*Math.log10(Math.max(peakOL,1e-10));this.meterPeakOR=20*Math.log10(Math.max(peakOR,1e-10));this.port.postMessage({type:'meters',meters:{inputL:this.meterInputL,inputR:this.meterInputR,outputL:this.meterOutputL,outputR:this.meterOutputR},peaks:{inputL:this.meterPeakIL,inputR:this.meterPeakIR,outputL:this.meterPeakOL,outputR:this.meterPeakOR}});
       const compInL=rmsToDb(compRmsIL,blockSize),compInR=rmsToDb(compRmsIR,blockSize);const compOutL=rmsToDb(compRmsOL,blockSize),compOutR=rmsToDb(compRmsOR,blockSize);this.port.postMessage({type:'compMeters',compMeters:{inL:compInL,inR:compInR,outL:compOutL,outR:compOutR,inPeakL:20*Math.log10(Math.max(compPeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(compPeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(compPeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(compPeakOR,1e-10)),gr:this.compGR}});
       const deInL=rmsToDb(dynEqRmsIL,blockSize),deInR=rmsToDb(dynEqRmsIR,blockSize);const deOutL=rmsToDb(dynEqRmsOL,blockSize),deOutR=rmsToDb(dynEqRmsOR,blockSize);this.port.postMessage({type:'dynEqMeters',dynEqMeters:{inL:deInL,inR:deInR,outL:deOutL,outR:deOutR,inPeakL:20*Math.log10(Math.max(dynEqPeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(dynEqPeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(dynEqPeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(dynEqPeakOR,1e-10)),gr:this.dynEqGR}});
-      const ge6InL=rmsToDb(geq6RmsIL,blockSize),ge6InR=rmsToDb(geq6RmsIR,blockSize);const ge6OutL=rmsToDb(geq6RmsOL,blockSize),ge6OutR=rmsToDb(geq6RmsOR,blockSize);this.port.postMessage({type:'geq6Meters',geq6Meters:{inL:ge6InL,inR:ge6InR,outL:ge6OutL,outR:ge6OutR,inPeakL:20*Math.log10(Math.max(geq6PeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(geq6PeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(geq6PeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(geq6PeakOR,1e-10)),gr:this.geq6GR}});
-      if(this.spectrumIdx>0){const spec=this.computeSpectrum(this.spectrumBuffer.slice(0,this.spectrumIdx));this.spectrumIdx=0;this.port.postMessage({type:'spectrum',spectrum:spec});}this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});this.port.postMessage({type:'gr',gr:{compressor:this.compressor.g>0?20*Math.log10(this.compressor.g):0,finalLimiter:this.finalLimiter.enabled?20*Math.log10(Math.max(this.finalLimiter.g,1e-10)):0,dynamicEQ:20*Math.log10(Math.max(this.dynamicEQ.g,1e-10))}});if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
+      const geInL=rmsToDb(geq16RmsIL,blockSize),geInR=rmsToDb(geq16RmsIR,blockSize);const geOutL=rmsToDb(geq16RmsOL,blockSize),geOutR=rmsToDb(geq16RmsOR,blockSize);this.port.postMessage({type:'geq16Meters',geq16Meters:{inL:geInL,inR:geInR,outL:geOutL,outR:geOutR,inPeakL:20*Math.log10(Math.max(geq16PeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(geq16PeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(geq16PeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(geq16PeakOR,1e-10)),gr:this.geq16GR}});
+      if(this.spectrumIdx>0){const spec=this.computeSpectrum(this.spectrumBuffer.slice(0,this.spectrumIdx));this.spectrumIdx=0;this.port.postMessage({type:'spectrum',spectrum:spec});}this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
       computeSpectrum(buffer){const N=buffer.length,result=new Float32Array(128),bands=128;for(let b=0;b<bands;b++){const freq=20*Math.pow(1000,b/bands);const k=Math.round(freq*N/this.sampleRate);if(k<1||k>=N/2)continue;let re=0,im=0;const omega=2*Math.PI*k/N;for(let i=0;i<N;i++){re+=buffer[i]*Math.cos(omega*i);im-=buffer[i]*Math.sin(omega*i);}const energy=Math.sqrt(re*re+im*im)/N;result[b]=20*Math.log10(Math.max(energy,1e-10));}return result;}
       computeEQCurve(){const points=128,curve=new Float32Array(points),sr=this.sampleRate;for(let i=0;i<points;i++){const freq=20*Math.pow(1000,i/points);let response=0;for(let j=0;j<31;j++){if(Math.abs(this.geqGains[j])<0.01)continue;const f=this.geqFilters[j];const omega=2*Math.PI*freq/sr;const cosW=Math.cos(omega),sinW=Math.sin(omega),cos2W=Math.cos(2*omega),sin2W=Math.sin(2*omega);const numRe=f.b0+f.b1*cosW+f.b2*cos2W,numIm=f.b1*sinW+f.b2*sin2W;const denRe=1+f.a1*cosW+f.a2*cos2W,denIm=f.a1*sinW+f.a2*sin2W;const mag=Math.sqrt((numRe*numRe+numIm*numIm)/(denRe*denRe+denIm*denIm));response+=20*Math.log10(Math.max(mag,1e-10));}curve[i]=response;}return curve;}
     }
@@ -345,23 +330,23 @@ class BroadcastProcessor {
     if (!this.audioWorklet) return;
     const p = this.params, port = this.audioWorklet.port;
     for (let i = 0; i < 31; i++) port.postMessage({ type: 'geq', index: i, value: p.geq[i] });
-    for (let i = 0; i < 6; i++) port.postMessage({ type: 'geq6', index: i, value: p.geq6[i] });
+    for (let i = 0; i < 16; i++) port.postMessage({ type: 'geq16', index: i, value: p.geq16[i] });
     port.postMessage({ type: 'compressor', params: p.compressor });
     port.postMessage({ type: 'finalLimiter', params: p.finalLimiter });
     port.postMessage({ type: 'dynamicEQ', params: p.dynamicEQ });
-    Object.keys(p).forEach(key => { if (!['geq', 'geqMaster', 'geq6', 'geq6Master', 'compressor', 'compressorMaster', 'finalLimiter', 'dynamicEQ', 'dynamicEQMaster', 'mode', 'inputDevice', 'outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
+    Object.keys(p).forEach(key => { if (!['geq','geqMaster','geq16','geq16Master','compressor','compressorMaster','finalLimiter','dynamicEQ','dynamicEQMaster','mode','inputDevice','outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
     port.postMessage({ type: 'geqMaster', enabled: p.geqMaster?.enabled ?? true });
     port.postMessage({ type: 'compressorMaster', enabled: p.compressorMaster?.enabled ?? true });
     port.postMessage({ type: 'finalLimiterEnabled', enabled: p.finalLimiter?.enabled ?? true });
     port.postMessage({ type: 'dynamicEQMaster', enabled: p.dynamicEQMaster?.enabled ?? true });
-    port.postMessage({ type: 'geq6Master', enabled: p.geq6Master?.enabled ?? true });
+    port.postMessage({ type: 'geq16Master', enabled: p.geq16Master?.enabled ?? true });
   }
 
   sendParam(key, value) { if (!this.audioWorklet) return; this.params[key] = value; this.audioWorklet.port.postMessage({ type: 'param', key, value }); }
   sendGEQ(index, value) { if (!this.audioWorklet) return; this.params.geq[index] = value; this.audioWorklet.port.postMessage({ type: 'geq', index, value }); this.updateGEQValue(index); this.drawEQCurve(); }
   resetGEQ() { this.params.geq.fill(0); for (let i = 0; i < 31; i++) { this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: 0 }); this.updateGEQValue(i); } this.drawEQCurve(); }
-  sendGEQ6(index, value) { if (!this.audioWorklet) return; this.params.geq6[index] = value; this.audioWorklet.port.postMessage({ type: 'geq6', index, value }); this.updateGEQ6Value(index); }
-  resetGEQ6() { this.params.geq6.fill(0); for (let i = 0; i < 6; i++) { this.audioWorklet?.port.postMessage({ type: 'geq6', index: i, value: 0 }); this.updateGEQ6Value(i); } }
+  sendGEQ16(index, value) { if (!this.audioWorklet) return; this.params.geq16[index] = value; this.audioWorklet.port.postMessage({ type: 'geq16', index, value }); this.updateGEQ16Value(index); }
+  resetGEQ16() { this.params.geq16.fill(0); for (let i = 0; i < 16; i++) { this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: 0 }); this.updateGEQ16Value(i); } }
   sendCompressor(params) { if (!this.audioWorklet) return; Object.assign(this.params.compressor, params); this.audioWorklet.port.postMessage({ type: 'compressor', params: this.params.compressor }); }
   sendFinalLimiter(params) { if (!this.audioWorklet) return; Object.assign(this.params.finalLimiter, params); this.audioWorklet.port.postMessage({ type: 'finalLimiter', params }); }
   sendDynamicEQ(params) { if (!this.audioWorklet) return; Object.assign(this.params.dynamicEQ, params); this.audioWorklet.port.postMessage({ type: 'dynamicEQ', params: this.params.dynamicEQ }); }
@@ -399,14 +384,14 @@ class BroadcastProcessor {
     document.getElementById('dynEqGrMeter').style.width = Math.max(0, Math.min(100, Math.abs(dm.gr) / 30 * 100)) + '%';
   }
 
-  updateGeq6Meters() {
-    const gm = this.geq6Meters; const clampDb = (db) => Math.max(-60, Math.min(0, db));
+  updateGeq16Meters() {
+    const gm = this.geq16Meters; const clampDb = (db) => Math.max(-60, Math.min(0, db));
     const setMini = (fId, pId, v, pv) => { document.getElementById(fId).style.height = Math.max(0, ((clampDb(v) + 60) / 60 * 100)) + '%'; document.getElementById(pId).style.bottom = Math.max(0, ((clampDb(pv) + 60) / 60 * 100)) + '%'; };
-    setMini('geq6InFillL', 'geq6InPeakL', gm.inL, gm.inPeakL); setMini('geq6InFillR', 'geq6InPeakR', gm.inR, gm.inPeakR);
-    setMini('geq6OutFillL', 'geq6OutPeakL', gm.outL, gm.outPeakL); setMini('geq6OutFillR', 'geq6OutPeakR', gm.outR, gm.outPeakR);
-    document.getElementById('geq6InLevel').textContent = `L: ${gm.inL.toFixed(1)} dB | R: ${gm.inR.toFixed(1)} dB`;
-    document.getElementById('geq6OutLevel').textContent = `L: ${gm.outL.toFixed(1)} dB | R: ${gm.outR.toFixed(1)} dB`;
-    document.getElementById('geq6GrMeter').style.width = Math.max(0, Math.min(100, 0)) + '%';
+    setMini('geq16InFillL', 'geq16InPeakL', gm.inL, gm.inPeakL); setMini('geq16InFillR', 'geq16InPeakR', gm.inR, gm.inPeakR);
+    setMini('geq16OutFillL', 'geq16OutPeakL', gm.outL, gm.outPeakL); setMini('geq16OutFillR', 'geq16OutPeakR', gm.outR, gm.outPeakR);
+    document.getElementById('geq16InLevel').textContent = `L: ${gm.inL.toFixed(1)} dB | R: ${gm.inR.toFixed(1)} dB`;
+    document.getElementById('geq16OutLevel').textContent = `L: ${gm.outL.toFixed(1)} dB | R: ${gm.outR.toFixed(1)} dB`;
+    document.getElementById('geq16GrMeter').style.width = '0%';
   }
 
   updateGRMeters(gr) {}
@@ -433,7 +418,7 @@ class BroadcastProcessor {
     document.getElementById('inputDevice').addEventListener('change', (e) => { this.params.inputDevice = e.target.value; localStorage.setItem('inputDevice', e.target.value); if (this.isEnabled) this.restartAudio(); });
     document.getElementById('outputDevice').addEventListener('change', async (e) => { this.params.outputDevice = e.target.value; localStorage.setItem('outputDevice', e.target.value); if (this.audioCtx && this.audioCtx.setSinkId) { try { await this.audioCtx.setSinkId(e.target.value); } catch (err) { console.error("Error:", err); } } });
     document.getElementById('geqResetBtn').addEventListener('click', () => this.resetGEQ());
-    document.getElementById('geq6ResetBtn').addEventListener('click', () => this.resetGEQ6());
+    document.getElementById('geq16ResetBtn').addEventListener('click', () => this.resetGEQ16());
     this.enumerateDevices();
   }
 
@@ -443,7 +428,7 @@ class BroadcastProcessor {
       'compressor': () => { this.params.compressorMaster.enabled = !this.params.compressorMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'compressorMaster', enabled: this.params.compressorMaster.enabled }); },
       'finalLimiter': () => { this.params.finalLimiter.enabled = !this.params.finalLimiter.enabled; this.audioWorklet?.port.postMessage({ type: 'finalLimiterEnabled', enabled: this.params.finalLimiter.enabled }); },
       'dynamicEQ': () => { this.params.dynamicEQMaster.enabled = !this.params.dynamicEQMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'dynamicEQMaster', enabled: this.params.dynamicEQMaster.enabled }); },
-      'geq6': () => { this.params.geq6Master.enabled = !this.params.geq6Master.enabled; this.audioWorklet?.port.postMessage({ type: 'geq6Master', enabled: this.params.geq6Master.enabled }); }
+      'geq16': () => { this.params.geq16Master.enabled = !this.params.geq16Master.enabled; this.audioWorklet?.port.postMessage({ type: 'geq16Master', enabled: this.params.geq16Master.enabled }); }
     };
     document.querySelectorAll('.bypass-btn').forEach(btn => { btn.addEventListener('click', () => { const m = btn.dataset.module; if (map[m]) map[m](); btn.classList.toggle('active'); btn.textContent = btn.classList.contains('active') ? 'ACTIVE' : 'BYPASS'; }); });
   }
@@ -483,31 +468,31 @@ class BroadcastProcessor {
     valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888';
   }
 
-  initGEQ6Faders() {
-    const container = document.getElementById('geq6Faders'); if (!container) return;
-    const freqs = this.geq6Frequencies; let html = '';
+  initGEQ16Faders() {
+    const container = document.getElementById('geq16Faders'); if (!container) return;
+    const freqs = this.geq16Frequencies; let html = '';
     freqs.forEach((freq, i) => {
-      const label = freq >= 1000 ? (freq % 1000 === 0 ? freq / 1000 + 'k' : (freq / 1000).toFixed(1) + 'k') : freq;
-      html += `<div class="geq-channel"><div class="geq-value" id="geq6Val${i}">0 dB</div><div class="geq-fader-track" data-geq6idx="${i}"><div class="geq-fader-thumb" id="geq6Thumb${i}"></div></div><div class="geq-freq-label highlight">${label}</div></div>`;
+      const label = freq >= 1000 ? (freq % 1000 === 0 ? (freq / 1000) + 'k' : (freq / 1000).toFixed(1) + 'k') : freq;
+      html += `<div class="geq-channel"><div class="geq-value" id="geq16Val${i}">0 dB</div><div class="geq-fader-track" data-geq16idx="${i}"><div class="geq-fader-thumb" id="geq16Thumb${i}"></div></div><div class="geq-freq-label highlight">${label}</div></div>`;
     });
     container.innerHTML = html;
     container.querySelectorAll('.geq-fader-track').forEach(track => {
-      const idx = parseInt(track.dataset.geq6idx); const thumb = track.querySelector('.geq-fader-thumb'); let isDragging = false, startY = 0, startGain = 0;
-      const updateFader = (gain) => { gain = Math.max(-12, Math.min(12, gain)); this.params.geq6[idx] = gain; const pct = ((gain + 12) / 24) * 100; thumb.style.bottom = pct + '%'; const valEl = document.getElementById(`geq6Val${idx}`); if (valEl) { valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888'; } this.sendGEQ6(idx, gain); };
-      updateFader(this.params.geq6[idx]);
+      const idx = parseInt(track.dataset.geq16idx); const thumb = track.querySelector('.geq-fader-thumb'); let isDragging = false, startY = 0, startGain = 0;
+      const updateFader = (gain) => { gain = Math.max(-12, Math.min(12, gain)); this.params.geq16[idx] = gain; const pct = ((gain + 12) / 24) * 100; thumb.style.bottom = pct + '%'; const valEl = document.getElementById(`geq16Val${idx}`); if (valEl) { valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888'; } this.sendGEQ16(idx, gain); };
+      updateFader(this.params.geq16[idx]);
       const onMove = (clientY) => { if (!isDragging) return; const rect = track.getBoundingClientRect(); const trackH = rect.height; const delta = (startY - clientY) / trackH * 24; updateFader(startGain + delta); };
-      track.addEventListener('mousedown', (e) => { isDragging = true; startY = e.clientY; startGain = this.params.geq6[idx]; e.preventDefault(); });
+      track.addEventListener('mousedown', (e) => { isDragging = true; startY = e.clientY; startGain = this.params.geq16[idx]; e.preventDefault(); });
       window.addEventListener('mousemove', (e) => onMove(e.clientY));
       window.addEventListener('mouseup', () => { isDragging = false; });
-      track.addEventListener('touchstart', (e) => { isDragging = true; startY = e.touches[0].clientY; startGain = this.params.geq6[idx]; e.preventDefault(); });
+      track.addEventListener('touchstart', (e) => { isDragging = true; startY = e.touches[0].clientY; startGain = this.params.geq16[idx]; e.preventDefault(); });
       window.addEventListener('touchmove', (e) => { if (isDragging) onMove(e.touches[0].clientY); });
       window.addEventListener('touchend', () => { isDragging = false; });
-      track.addEventListener('wheel', (e) => { e.preventDefault(); updateFader(this.params.geq6[idx] - e.deltaY * 0.05); }, { passive: false });
+      track.addEventListener('wheel', (e) => { e.preventDefault(); updateFader(this.params.geq16[idx] - e.deltaY * 0.05); }, { passive: false });
     });
   }
 
-  updateGEQ6Value(index) {
-    const gain = this.params.geq6[index]; const valEl = document.getElementById(`geq6Val${index}`); const thumb = document.getElementById(`geq6Thumb${index}`);
+  updateGEQ16Value(index) {
+    const gain = this.params.geq16[index]; const valEl = document.getElementById(`geq16Val${index}`); const thumb = document.getElementById(`geq16Thumb${index}`);
     if (!valEl || !thumb) return; const pct = ((gain + 12) / 24) * 100; thumb.style.bottom = pct + '%';
     valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888';
   }
@@ -607,25 +592,25 @@ class BroadcastProcessor {
   }
 
   presets = {
-    bypass: { name: 'Bypass', geq: new Float32Array(31), geq6: new Float32Array(6), compressor: { threshold: -30, ratio: 2, attack: 50, release: 200, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 1.5, attack: 20, release: 100, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    'fm-hot': { name: 'FM Hot', geq: [0, 0.5, 1, 1.5, 2, 1.5, 1, 0.5, 0, -0.5, 0, 0.5, 1, 1, 0.5, 0, 0, 0.5, 1, 1.5, 2, 2.5, 2, 1.5, 1, 0.5, 0.5, 1, 1.5, 2, 2.5], geq6: [1, 2, 1, 1.5, 1, 0.5], compressor: { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 80, gain: 2, enabled: true }, inputGain: 3, outputGain: 0 },
-    'fm-clean': { name: 'FM Clean', geq: new Float32Array(31).fill(0), geq6: new Float32Array(6).fill(0), compressor: { threshold: -16, ratio: 2.5, attack: 20, release: 150, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -20, ratio: 2, attack: 15, release: 120, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    streaming: { name: 'Streaming', geq: [0, 0, 0.5, 1, 1, 0.5, 0, 0, 0, -0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0.5, 0.5, 0, 0, 0.5, 1, 1, 1.5], geq6: [0.5, 0.5, 0.5, 1, 0.5, 0.5], compressor: { threshold: -14, ratio: 3, attack: 15, release: 120, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -18, ratio: 2, attack: 10, release: 100, gain: 1, enabled: true }, inputGain: 2, outputGain: 0 },
-    podcast: { name: 'Podcast', geq: [0, 0, 0, 0, -1, -2, -2, -1, 0, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], geq6: [-2, -1, 1, 2, 1, 0.5], compressor: { threshold: -18, ratio: 4, attack: 5, release: 80, makeupGain: 6, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -22, ratio: 3, attack: 3, release: 60, gain: 3, enabled: true }, inputGain: 5, outputGain: 0 },
-    voice: { name: 'Voice', geq: [0, 0, 0, -1, -2, -3, -3, -2, -1, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], geq6: [-2, -1.5, 1, 2, 1, 0], compressor: { threshold: -20, ratio: 5, attack: 3, release: 60, makeupGain: 8, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 4, attack: 2, release: 50, gain: 4, enabled: true }, inputGain: 6, outputGain: 0 },
-    music: { name: 'Music', geq: [1, 1, 1.5, 2, 2, 1.5, 1, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 1, 1.5, 2, 2, 2, 1.5, 1, 1, 1, 1, 1.5], geq6: [1, 0.5, 0, 0.5, 1, 0.5], compressor: { threshold: -10, ratio: 2, attack: 30, release: 200, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -14, ratio: 1.5, attack: 20, release: 150, gain: 1, enabled: true }, inputGain: 0, outputGain: 0 },
-    rock: { name: 'Rock', geq: [3, 3, 3.5, 4, 4, 3.5, 3, 2, 1, 0, -1, -1, 0, 1, 1, 0, 0, 0, 0.5, 1, 1.5, 2, 2.5, 2.5, 2.5, 2, 2, 2.5, 3, 3.5, 4], geq6: [2, 1, -1, 1.5, 1, 0.5], compressor: { threshold: -14, ratio: 4, attack: 5, release: 80, makeupGain: 5, enabled: true }, finalLimiter: { threshold: -0.5, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 3, attack: 5, release: 60, gain: 3, enabled: true }, inputGain: 3, outputGain: 2 },
-    classical: { name: 'Classical', geq: new Float32Array(31).fill(0), geq6: new Float32Array(6).fill(0), compressor: { threshold: -24, ratio: 1.5, attack: 100, release: 500, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 10, attack: 1, release: 100, gain: 0, enabled: true }, dynamicEQ: { threshold: -26, ratio: 1.2, attack: 50, release: 300, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    'bass-boost': { name: 'Bass Boost', geq: [6, 6, 6, 5.5, 5, 4.5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], geq6: [4, 2, 0, -0.5, 0, 0], compressor: { threshold: -10, ratio: 3, attack: 15, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 2.5, attack: 10, release: 80, gain: 2, enabled: true }, inputGain: 0, outputGain: 0 },
-    bright: { name: 'Bright', geq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4.5, 5, 5], geq6: [0, 0, 0, 1, 2, 3], compressor: { threshold: -14, ratio: 3, attack: 10, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 70, gain: 3, enabled: true }, inputGain: 0, outputGain: 0 }
+    bypass: { name: 'Bypass', geq: new Float32Array(31), geq16: new Float32Array(16), compressor: { threshold: -30, ratio: 2, attack: 50, release: 200, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 1.5, attack: 20, release: 100, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    'fm-hot': { name: 'FM Hot', geq: [0,0.5,1,1.5,2,1.5,1,0.5,0,-0.5,0,0.5,1,1,0.5,0,0,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5,1,1.5,2,2.5], geq16: [0.5,1,1.5,2,1,0.5,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5], compressor: { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 80, gain: 2, enabled: true }, inputGain: 3, outputGain: 0 },
+    'fm-clean': { name: 'FM Clean', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -16, ratio: 2.5, attack: 20, release: 150, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -20, ratio: 2, attack: 15, release: 120, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    streaming: { name: 'Streaming', geq: [0,0,0.5,1,1,0.5,0,0,0,-0.5,0,0,0.5,0.5,0,0,0,0,0.5,1,1,1,0.5,0.5,0.5,0,0,0.5,1,1,1.5], geq16: [0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,1,1,1,0.5,0.5,0.5,0.5,0.5], compressor: { threshold: -14, ratio: 3, attack: 15, release: 120, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -18, ratio: 2, attack: 10, release: 100, gain: 1, enabled: true }, inputGain: 2, outputGain: 0 },
+    podcast: { name: 'Podcast', geq: [0,0,0,0,-1,-2,-2,-1,0,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,-0.5,0.5,1,1.5,1,1,0.5,0,0,0,0,0,0], compressor: { threshold: -18, ratio: 4, attack: 5, release: 80, makeupGain: 6, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -22, ratio: 3, attack: 3, release: 60, gain: 3, enabled: true }, inputGain: 5, outputGain: 0 },
+    voice: { name: 'Voice', geq: [0,0,0,-1,-2,-3,-3,-2,-1,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,0,0.5,1,1.5,1.5,2,1.5,1,0.5,0,0,0,0], compressor: { threshold: -20, ratio: 5, attack: 3, release: 60, makeupGain: 8, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 4, attack: 2, release: 50, gain: 4, enabled: true }, inputGain: 6, outputGain: 0 },
+    music: { name: 'Music', geq: [1,1,1.5,2,2,1.5,1,0.5,0,0,0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2,2,1.5,1,1,1,1,1.5], geq16: [1,1,0.5,0.5,0,0,0,0,0.5,1,1.5,1.5,1,1,0.5,0.5], compressor: { threshold: -10, ratio: 2, attack: 30, release: 200, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -14, ratio: 1.5, attack: 20, release: 150, gain: 1, enabled: true }, inputGain: 0, outputGain: 0 },
+    rock: { name: 'Rock', geq: [3,3,3.5,4,4,3.5,3,2,1,0,-1,-1,0,1,1,0,0,0,0.5,1,1.5,2,2.5,2.5,2.5,2,2,2.5,3,3.5,4], geq16: [2,2,1.5,1,0,0,0.5,1,1.5,2,2.5,2,2,1.5,1,0.5], compressor: { threshold: -14, ratio: 4, attack: 5, release: 80, makeupGain: 5, enabled: true }, finalLimiter: { threshold: -0.5, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 3, attack: 5, release: 60, gain: 3, enabled: true }, inputGain: 3, outputGain: 2 },
+    classical: { name: 'Classical', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -24, ratio: 1.5, attack: 100, release: 500, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 10, attack: 1, release: 100, gain: 0, enabled: true }, dynamicEQ: { threshold: -26, ratio: 1.2, attack: 50, release: 300, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    'bass-boost': { name: 'Bass Boost', geq: [6,6,6,5.5,5,4.5,4,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [4,3.5,2.5,1.5,0.5,0,0,0,0,0,0,0,0,0,0,0], compressor: { threshold: -10, ratio: 3, attack: 15, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 2.5, attack: 10, release: 80, gain: 2, enabled: true }, inputGain: 0, outputGain: 0 },
+    bright: { name: 'Bright', geq: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4.5,5,5], geq16: [0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2.5,3,3.5], compressor: { threshold: -14, ratio: 3, attack: 10, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 70, gain: 3, enabled: true }, inputGain: 0, outputGain: 0 }
   };
 
   loadPreset(name) {
     const preset = this.presets[name]; if (!preset) return;
     if (preset.geq && preset.geq.length === 31) { for (let i = 0; i < 31; i++) { const val = typeof preset.geq[i] === 'number' ? preset.geq[i] : 0; this.params.geq[i] = val; this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: val }); this.updateGEQValue(i); } }
     else { this.params.geq.fill(0); for (let i = 0; i < 31; i++) { this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: 0 }); this.updateGEQValue(i); } }
-    if (preset.geq6 && preset.geq6.length === 6) { for (let i = 0; i < 6; i++) { const val = typeof preset.geq6[i] === 'number' ? preset.geq6[i] : 0; this.params.geq6[i] = val; this.audioWorklet?.port.postMessage({ type: 'geq6', index: i, value: val }); this.updateGEQ6Value(i); } }
-    else { this.params.geq6.fill(0); for (let i = 0; i < 6; i++) { this.audioWorklet?.port.postMessage({ type: 'geq6', index: i, value: 0 }); this.updateGEQ6Value(i); } }
+    if (preset.geq16 && preset.geq16.length === 16) { for (let i = 0; i < 16; i++) { const val = typeof preset.geq16[i] === 'number' ? preset.geq16[i] : 0; this.params.geq16[i] = val; this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: val }); this.updateGEQ16Value(i); } }
+    else { this.params.geq16.fill(0); for (let i = 0; i < 16; i++) { this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: 0 }); this.updateGEQ16Value(i); } }
     if (preset.compressor) { this.params.compressor = { ...this.params.compressor, ...preset.compressor }; this.audioWorklet?.port.postMessage({ type: 'compressor', params: this.params.compressor }); }
     if (preset.finalLimiter) { this.params.finalLimiter = { ...this.params.finalLimiter, ...preset.finalLimiter }; this.sendFinalLimiter(preset.finalLimiter); }
     if (preset.dynamicEQ) { this.params.dynamicEQ = { ...this.params.dynamicEQ, ...preset.dynamicEQ }; this.sendDynamicEQ(preset.dynamicEQ); }
