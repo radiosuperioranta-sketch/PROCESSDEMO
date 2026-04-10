@@ -7,30 +7,13 @@
 <title>OptiMod Pro 1600 - Broadcast Audio Processor</title>
 <style>
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-panel: #141414;
-  --border-color: #333;
-  --text-primary: #e0e0e0;
-  --text-secondary: #888;
-  --accent-amber: #ffb700;
-  --accent-green: #39ff14;
-  --accent-red: #ff3333;
-  --knob-size: 52px;
-  --knob-small: 38px;
-  --fader-height: 140px;
+  --bg-primary: #0a0a0a; --bg-secondary: #1a1a1a; --bg-panel: #141414;
+  --border-color: #333; --text-primary: #e0e0e0; --text-secondary: #888;
+  --accent-amber: #ffb700; --accent-green: #39ff14; --accent-red: #ff3333;
+  --knob-size: 52px; --knob-small: 38px; --fader-height: 140px;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-
+body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; }
 .header { background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 2px solid var(--accent-amber); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 20px rgba(255,183,0,0.1); }
 .logo { display: flex; align-items: center; gap: 15px; }
 .logo-icon { width: 50px; height: 50px; background: radial-gradient(circle, var(--accent-amber) 0%, #cc8800 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: #000; box-shadow: 0 0 15px rgba(255,183,0,0.4); }
@@ -128,6 +111,10 @@ body {
 .geq-freq-label.highlight { color: var(--accent-amber); font-weight: bold; }
 .geq-reset-btn { padding: 4px 10px; background: rgba(255,51,51,0.15); border: 1px solid #ff3333; color: #ff3333; border-radius: 3px; cursor: pointer; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
 .geq-reset-btn:hover { background: rgba(255,183,0,0.15); border-color: var(--accent-amber); color: var(--accent-amber); }
+.mb-section { margin-bottom: 8px; }
+.mb-bands-container { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.mb-band { display: flex; flex-direction: column; align-items: center; padding: 6px; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); min-width: 140px; }
+.mb-band-title { font-size: 9px; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; text-align: center; }
 </style>
 </head>
 <body>
@@ -164,9 +151,74 @@ body {
   </div>
   <div class="panel spectrum-panel"><div class="panel-title">📈 Spectrum Analyzer</div><canvas class="spectrum-canvas" id="spectrumCanvas"></canvas></div>
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 31 Bandas<button class="bypass-btn active" data-module="geq">ACTIVE</button><button class="geq-reset-btn" id="geqResetBtn">↺ Reset</button></div><canvas class="eq-display" id="eqCanvas"></canvas><div class="geq-container"><div class="geq-faders" id="geqFaders"></div></div></div>
-  <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Compresor 3 Bandas<button class="bypass-btn active" data-module="comp3">ACTIVE</button></div><div id="comp3Knobs"></div></div>
+  <div class="dsp-panel">
+    <div class="dsp-panel-title"><span class="status-dot"></span>Compresor Estéreo<button class="bypass-btn active" data-module="comp">ACTIVE</button></div>
+    <div class="knobs-grid">
+      <div class="knob-container"><div class="knob-wrapper" data-param="compInput" data-min="-24" data-max="24" data-default="0" id="compInput"><div class="knob small"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Input L/R</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compThreshold" data-min="-60" data-max="0" data-default="-20" id="compThreshold"><div class="knob small"></div></div><div class="knob-value">-20.0 dB</div><div class="knob-label">Threshold</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compRatio" data-min="1" data-max="20" data-default="4" id="compRatio"><div class="knob small"></div></div><div class="knob-value">4.0:1</div><div class="knob-label">Ratio</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compAttack" data-min="0.1" data-max="200" data-default="10" id="compAttack"><div class="knob small"></div></div><div class="knob-value">10 ms</div><div class="knob-label">Attack</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compRelease" data-min="10" data-max="2000" data-default="80" id="compRelease"><div class="knob small"></div></div><div class="knob-value">80 ms</div><div class="knob-label">Release</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compKnee" data-min="0" data-max="24" data-default="6" id="compKnee"><div class="knob small"></div></div><div class="knob-value">6.0 dB</div><div class="knob-label">Knee</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compMakeup" data-min="-12" data-max="24" data-default="0" id="compMakeup"><div class="knob small"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Make-up Gain</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="compOutput" data-min="-24" data-max="24" data-default="0" id="compOutput"><div class="knob small"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Output L/R</div></div>
+    </div>
+    <div class="gr-meter"><div class="gr-meter-fill" id="compGrMeter"></div></div>
+  </div>
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Limiter Final<button class="bypass-btn active" data-module="finalLimiter">ACTIVE</button></div><div class="knobs-grid" id="finalLimiterKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="limGrMeter"></div></div></div>
-  <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Power Limiter<button class="bypass-btn active" data-module="powerLimiter">ACTIVE</button></div><div class="knobs-grid" id="powerLimiterKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="powLimGrMeter"></div></div></div>
+  
+  <!-- NUEVO MÓDULO DE PROCESAMIENTO DE POTENCIA -->
+  <div class="dsp-panel">
+    <div class="dsp-panel-title"><span class="status-dot"></span>Procesamiento de Potencia<button class="bypass-btn active" data-module="power">ACTIVE</button></div>
+    <!-- Input/Output -->
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px;">
+      <div class="knob-container"><div class="knob-wrapper" data-param="pwInput" data-min="-24" data-max="24" data-default="0" id="pwInput"><div class="knob small"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Input R/L</div></div>
+      <div class="knob-container"><div class="knob-wrapper" data-param="pwOutput" data-min="-24" data-max="24" data-default="0" id="pwOutput"><div class="knob small"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Output R/L</div></div>
+    </div>
+    
+    <!-- Multibanda -->
+    <div class="mb-section">
+      <div class="band-title">Multibanda (4 Bandas)</div>
+      <div id="pwMultibandKnobs"></div>
+    </div>
+    
+    <!-- AGC + Compresor + Limitador -->
+    <div class="mb-section">
+      <div class="band-title">AGC + Compresor + Limitador</div>
+      <div class="knobs-grid">
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwAgcThresh" data-min="-60" data-max="0" data-default="-24" id="pwAgcThresh"><div class="knob small"></div></div><div class="knob-value">-24 dB</div><div class="knob-label">AGC Thresh</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwAgcRatio" data-min="1" data-max="20" data-default="3" id="pwAgcRatio"><div class="knob small"></div></div><div class="knob-value">3.0:1</div><div class="knob-label">AGC Ratio</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwCompThresh" data-min="-40" data-max="0" data-default="-12" id="pwCompThresh"><div class="knob small"></div></div><div class="knob-value">-12 dB</div><div class="knob-label">Comp Thresh</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwCompRatio" data-min="1" data-max="20" data-default="4" id="pwCompRatio"><div class="knob small"></div></div><div class="knob-value">4.0:1</div><div class="knob-label">Comp Ratio</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwLimiterThresh" data-min="-12" data-max="0" data-default="-3" id="pwLimiterThresh"><div class="knob small"></div></div><div class="knob-value">-3 dB</div><div class="knob-label">Limiter Thresh</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwLimiterRatio" data-min="10" data-max="100" data-default="20" id="pwLimiterRatio"><div class="knob small"></div></div><div class="knob-value">20:1</div><div class="knob-label">Limiter Ratio</div></div>
+      </div>
+    </div>
+    
+    <!-- Sidechain + Bass + Exciter -->
+    <div class="mb-section">
+      <div class="band-title">Sidechain / Bass Enhancer / Exciter</div>
+      <div class="knobs-grid">
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwScHPF" data-min="20" data-max="500" data-default="100" id="pwScHPF"><div class="knob small"></div></div><div class="knob-value">100</div><div class="knob-label">SC HPF Hz</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwScMix" data-min="0" data-max="100" data-default="50" id="pwScMix"><div class="knob small"></div></div><div class="knob-value">50%</div><div class="knob-label">SC Mix</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwBassFreq" data-min="30" data-max="200" data-default="80" id="pwBassFreq"><div class="knob small"></div></div><div class="knob-value">80 Hz</div><div class="knob-label">Bass Freq</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwBassAmt" data-min="0" data-max="12" data-default="3" id="pwBassAmt"><div class="knob small"></div></div><div class="knob-value">3 dB</div><div class="knob-label">Bass Amt</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwExciteFreq" data-min="2000" data-max="16000" data-default="5000" id="pwExciteFreq"><div class="knob small"></div></div><div class="knob-value">5k</div><div class="knob-label">Excite Freq</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwExciteAmt" data-min="0" data-max="12" data-default="2" id="pwExciteAmt"><div class="knob small"></div></div><div class="knob-value">2 dB</div><div class="knob-label">Excite Amt</div></div>
+      </div>
+    </div>
+    
+    <!-- Clipping Control Final -->
+    <div class="mb-section">
+      <div class="band-title">Clipping Control Final</div>
+      <div class="knobs-grid">
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwClipMode" data-min="0" data-max="2" data-default="1" id="pwClipMode"><div class="knob small"></div></div><div class="knob-value">SOFT</div><div class="knob-label">Mode</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwClipThresh" data-min="-6" data-max="0" data-default="-0.5" id="pwClipThresh"><div class="knob small"></div></div><div class="knob-value">-0.5 dB</div><div class="knob-label">Clip Thresh</div></div>
+      </div>
+    </div>
+    <div class="gr-meter"><div class="gr-meter-fill" id="pwGrMeter"></div></div>
+  </div>
+  
   <div class="dsp-row">
     <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Pre-Emphasis<button class="bypass-btn active" data-module="preEmphasis">ACTIVE</button></div><div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="preEmphasis" data-min="0" data-max="1" data-default="0"><div class="knob small"></div></div><div class="knob-value">50μs</div><div class="knob-label">Time</div></div><div class="knob-container"><div class="knob-wrapper" data-param="preEmphasisGain" data-min="0" data-max="12" data-default="0"><div class="knob small"></div></div><div class="knob-value">0 dB</div><div class="knob-label">Amount</div></div></div></div>
     <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Stereo Mode</div><div class="mode-selector" style="margin-bottom:10px;"><button class="mode-btn active" data-mode="stereo">Stereo</button><button class="mode-btn" data-mode="mono">Mono</button><button class="mode-btn" data-mode="mpx">MPX</button></div><div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="stereoWidth" data-min="0" data-max="200" data-default="100"><div class="knob"></div></div><div class="knob-value">100%</div><div class="knob-label">Width</div></div><div class="knob-container"><div class="knob-wrapper" data-param="stereoBalance" data-min="-100" data-max="100" data-default="0"><div class="knob"></div></div><div class="knob-value">C</div><div class="knob-label">Balance</div></div></div></div>
@@ -193,14 +245,27 @@ class BroadcastProcessor {
   initDefaultParams() {
     this.params.inputGain = 0; this.params.inputPan = 0; this.params.inputPhase = 0;
     this.params.geq = new Float32Array(31); this.params.geqMaster = { enabled: true };
-    this.params.comp3 = [
-      { name: 'Low', freq: 200, threshold: -20, ratio: 4, attack: 15, release: 80, gain: 0, enabled: true },
-      { name: 'Mid', freq: 2000, threshold: -18, ratio: 3.5, attack: 10, release: 60, gain: 0, enabled: true },
-      { name: 'High', freq: 8000, threshold: -15, ratio: 3, attack: 5, release: 40, gain: 0, enabled: true }
-    ];
-    this.params.comp3Master = { enabled: true };
+    this.params.comp = { input: 0, threshold: -20, ratio: 4, attack: 10, release: 80, knee: 6, makeup: 0, output: 0, enabled: true };
     this.params.finalLimiter = { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true };
-    this.params.powerLimiter = { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0, enabled: true };
+    
+    // Módulo de Potencia
+    this.params.pw = {
+      input: 0, output: 0, enabled: true,
+      multiband: [
+        { name:'Sub', freq:60, threshold:-18, ratio:3, attack:15, release:80, gain:2, enabled:true },
+        { name:'Low', freq:250, threshold:-16, ratio:3, attack:10, release:60, gain:1, enabled:true },
+        { name:'Mid', freq:2500, threshold:-14, ratio:2.5, attack:8, release:50, gain:1, enabled:true },
+        { name:'High', freq:8000, threshold:-12, ratio:2, attack:5, release:40, gain:0.5, enabled:true }
+      ],
+      agcThresh: -24, agcRatio: 3,
+      compThresh: -12, compRatio: 4,
+      limiterThresh: -3, limiterRatio: 20,
+      scHPF: 100, scMix: 50,
+      bassFreq: 80, bassAmt: 3,
+      exciteFreq: 5000, exciteAmt: 2,
+      clipMode: 1, clipThresh: -0.5
+    };
+    
     this.params.preEmphasis = { time: 0, gain: 0, enabled: true };
     this.params.outputGain = 0; this.params.outputLimit = 100; this.params.stereoMode = 0;
     this.params.stereoWidth = 100; this.params.stereoBalance = 0;
@@ -243,47 +308,189 @@ class BroadcastProcessor {
     class BroadcastProcessor extends AudioWorkletProcessor {
       constructor(options) {
         super(); this.sampleRate = options.sampleRate || 48000;
-        this.geqMasterEnabled = true; this.comp3MasterEnabled = true; this.finalLimiterEnabled = true; this.powerLimiterEnabled = true; this.preEmphasisEnabled = true;
+        this.geqMasterEnabled = true; this.compEnabled = true; this.finalLimiterEnabled = true; this.powerEnabled = true; this.preEmphasisEnabled = true;
         this.inputGain = 1.0; this.inputPan = 0.0; this.outputGain = 1.0; this.stereoWidth = 1.0; this.stereoBalance = 0.0; this.stereoMode = 0;
         this.geqFrequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
         this.geqGains = new Float32Array(31); this.geqQ = 4.318; this.geqFilters = []; this.initGEQ();
-        this.comp3 = [{freq:200,threshold:-20,ratio:4,attack:15,release:80,gain:0,envelope:0,g:1.0,lowFilter:null,highFilter:null},{freq:2000,threshold:-18,ratio:3.5,attack:10,release:60,gain:0,envelope:0,g:1.0,lowFilter:null,highFilter:null},{freq:8000,threshold:-15,ratio:3,attack:5,release:40,gain:0,envelope:0,g:1.0,lowFilter:null,highFilter:null}]; this.initCrossovers3('comp3');
+        this.compInput = 1.0; this.compThreshold = -20; this.compRatio = 4; this.compAttack = 10; this.compRelease = 80; this.compKnee = 6; this.compMakeup = 1.0; this.compOutput = 1.0; this.compEnvelope = 0; this.compGain = 1.0;
         this.finalLimiter = {threshold:-1,ratio:20,attack:0.5,release:50,gain:0,envelope:0,g:1.0};
-        this.powerLimiter = {threshold:-0.5,ratio:30,attack:0.1,release:20,gain:0,envelope:0,g:1.0};
         this.preEmphasisTime = 0; this.preEmphasisGain = 0; this.preEmphState = 0;
-        this.meterInputL = 0; this.meterInputR = 0; this.meterOutputL = 0; this.meterOutputR = 0; this.meterPeakIL = 0; this.meterPeakIR = 0; this.meterPeakOL = 0; this.meterPeakOR = 0;
-        this.spectrumBuffer = new Float32Array(256); this.spectrumIdx = 0; this.saturationAmount = 0.1; this.antiClipEnabled = true;
-        this.meterUpdateInterval = Math.floor(this.sampleRate / 30); this.frameCounter = 0;
-        this.port.onmessage = (e) => this.handleMessage(e.data);
+        
+        // Power Module State
+        this.pwInput = 1.0; this.pwOutput = 1.0;
+        this.pwMultiband = [
+          {name:'Sub',freq:60,th:-18,ratio:3,atk:15,rel:80,gn:1.259,env:0,g:1.0,enabled:true,lp:null,hp:null},
+          {name:'Low',freq:250,th:-16,ratio:3,atk:10,rel:60,gn:1.122,env:0,g:1.0,enabled:true,lp:null,hp:null},
+          {name:'Mid',freq:2500,th:-14,ratio:2.5,atk:8,rel:50,gn:1.122,env:0,g:1.0,enabled:true,lp:null,hp:null},
+          {name:'High',freq:8000,th:-12,ratio:2,atk:5,rel:40,gn:1.059,env:0,g:1.0,enabled:true,lp:null,hp:null}
+        ];
+        this.initPwCrossovers();
+        this.pwAgcTh = -24; this.pwAgcR = 3; this.pwAgcEnv = 0; this.pwAgcG = 1.0;
+        this.pwCompTh = -12; this.pwCompR = 4; this.pwCompEnv = 0; this.pwCompG = 1.0;
+        this.pwLimTh = -3; this.pwLimR = 20; this.pwLimEnv = 0; this.pwLimG = 1.0;
+        this.pwScHPF = 100; this.pwScMix = 0.5;
+        this.pwBassFreq = 80; this.pwBassAmt = 3;
+        this.pwExciteFreq = 5000; this.pwExciteAmt = 2;
+        this.pwClipMode = 1; this.pwClipThresh = Math.pow(10, -0.5/20);
+        this.bassState = {x1:0,y1:0,b0:0,b1:0,a1:0};
+        this.exciterState = {x1:0,y1:0,b0:0,b1:0,a1:0};
+        this.updateBassFilter(); this.updateExciterFilter();
+        
+        this.meterInputL=0;this.meterInputR=0;this.meterOutputL=0;this.meterOutputR=0;
+        this.meterPeakIL=0;this.meterPeakIR=0;this.meterPeakOL=0;this.meterPeakOR=0;
+        this.spectrumBuffer=new Float32Array(256);this.spectrumIdx=0;this.saturationAmount=0.1;this.antiClipEnabled=true;
+        this.meterUpdateInterval=Math.floor(this.sampleRate/30);this.frameCounter=0;
+        this.port.onmessage=(e)=>this.handleMessage(e.data);
       }
-      initGEQ() { this.geqFilters = []; for (let i = 0; i < 31; i++) { this.geqFilters.push({ freq:this.geqFrequencies[i], gain:0, q:this.geqQ, b0:0,b1:0,b2:0,a1:0,a2:0, x1L:0,x2L:0,y1L:0,y2L:0, x1R:0,x2R:0,y1R:0,y2R:0 }); this.updateGEQCoeffs(i); } }
-      updateGEQCoeffs(index) { const f=this.geqFilters[index]; const sr=this.sampleRate; const freq=Math.max(20,Math.min(20000,f.freq)); const gain=this.geqGains[index]; const q=f.q; const A=Math.pow(10,gain/40); const omega=2*Math.PI*freq/sr; const sinW=Math.sin(omega); const cosW=Math.cos(omega); const alpha=sinW/(2*q); f.b0=(1+alpha*A)/(1+alpha/A); f.b1=-2*cosW/(1+alpha/A); f.b2=(1-alpha*A)/(1+alpha/A); f.a1=-2*cosW/(1+alpha/A); f.a2=(1-alpha/A)/(1+alpha/A); }
+      
+      initGEQ(){this.geqFilters=[];for(let i=0;i<31;i++){this.geqFilters.push({freq:this.geqFrequencies[i],gain:0,q:this.geqQ,b0:0,b1:0,b2:0,a1:0,a2:0,x1L:0,x2L:0,y1L:0,y2L:0,x1R:0,x2R:0,y1R:0,y2R:0});this.updateGEQCoeffs(i);}}
+      updateGEQCoeffs(index){const f=this.geqFilters[index];const sr=this.sampleRate;const freq=Math.max(20,Math.min(20000,f.freq));const gain=this.geqGains[index];const q=f.q;const A=Math.pow(10,gain/40);const omega=2*Math.PI*freq/sr;const sinW=Math.sin(omega);const cosW=Math.cos(omega);const alpha=sinW/(2*q);f.b0=(1+alpha*A)/(1+alpha/A);f.b1=-2*cosW/(1+alpha/A);f.b2=(1-alpha*A)/(1+alpha/A);f.a1=-2*cosW/(1+alpha/A);f.a2=(1-alpha/A)/(1+alpha/A);}
       processGEQ(xL,xR){let yL=xL,yR=xR;for(let i=0;i<31;i++){const f=this.geqFilters[i];if(Math.abs(this.geqGains[i])>0.01){const nL=f.b0*yL+f.b1*f.x1L+f.b2*f.x2L-f.a1*f.y1L-f.a2*f.y2L;const nR=f.b0*yR+f.b1*f.x1R+f.b2*f.x2R-f.a1*f.y1R-f.a2*f.y2R;f.x2L=f.x1L;f.x1L=yL;f.y2L=f.y1L;f.y1L=nL;f.x2R=f.x1R;f.x1R=yR;f.y2R=f.y1R;f.y1R=nR;yL=nL;yR=nR;}}return{yL,yR};}
-      handleMessage(data){switch(data.type){case'param':this.setParam(data.key,data.value);break;case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;case'geqMaster':this.geqMasterEnabled=data.enabled;break;case'comp3':if(this.comp3[data.index])Object.assign(this.comp3[data.index],data.params);this.initCrossovers3('comp3');break;case'comp3Master':this.comp3MasterEnabled=data.enabled;break;case'finalLimiter':Object.assign(this.finalLimiter,data.params);break;case'finalLimiterEnabled':this.finalLimiterEnabled=data.enabled;break;case'powerLimiter':Object.assign(this.powerLimiter,data.params);break;case'powerLimiterEnabled':this.powerLimiterEnabled=data.enabled;break;case'preEmphasis':this.preEmphasisTime=data.value;break;case'preEmphasisGain':this.preEmphasisGain=data.value;break;case'preEmphasisEnabled':this.preEmphasisEnabled=data.enabled;break;}}
+      
+      initPwCrossovers(){for(let i=0;i<this.pwMultiband.length;i++){const b=this.pwMultiband[i];b.lp=this.createLP(b.freq);b.hp=this.createHP(b.freq);}}
+      createLP(freq){const rc=1/(2*Math.PI*freq);const dt=1/this.sampleRate;const a=dt/(rc+dt);return{a,stL:0,stR:0};}
+      createHP(freq){const rc=1/(2*Math.PI*freq);const dt=1/this.sampleRate;const a=rc/(rc+dt);return{a,stL:0,stR:0};}
+      processLP(f,x){const y=f.st+f.a*(x-f.st);f.st=y;return y;}
+      processHP(f,x){const y=f.a*(f.st+x);f.st=y;return x-y;}
+      
+      updateBassFilter(){const sr=this.sampleRate;const freq=this.pwBassFreq;const q=1.4;const A=Math.pow(10,this.pwBassAmt/40);const omega=2*Math.PI*freq/sr;const sinW=Math.sin(omega);const cosW=Math.cos(omega);const alpha=sinW/(2*q);const b0=A*((A+1)+(A-1)*cosW+2*Math.sqrt(A)*alpha);const b1=-2*A*((A-1)+(A+1)*cosW);const b2=A*((A+1)+(A-1)*cosW-2*Math.sqrt(A)*alpha);const a0=(A+1)-(A-1)*cosW+2*Math.sqrt(A)*alpha;const a1=2*((A-1)-(A+1)*cosW);const a2=(A+1)-(A-1)*cosW-2*Math.sqrt(A)*alpha;this.bassState.b0=b0/a0;this.bassState.b1=b1/a0;this.bassState.b2=b2/a0;this.bassState.a1=a1/a0;this.bassState.a2=a2/a0;}
+      processBass(s){const b=this.bassState;const y=b.b0*s+b.b1*b.x1+b.b2*b.x2-b.a1*b.y1-b.a2*b.y2;b.x2=b.x1;b.x1=s;b.y2=b.y1;b.y1=y;return y;}
+      
+      updateExciterFilter(){const sr=this.sampleRate;const freq=this.pwExciteFreq;const q=1;const A=Math.pow(10,this.pwExciteAmt/40);const omega=2*Math.PI*freq/sr;const sinW=Math.sin(omega);const cosW=Math.cos(omega);const alpha=sinW/(2*q);const b0=A*((A+1)+(A-1)*cosW+2*Math.sqrt(A)*alpha);const b1=-2*A*((A-1)+(A+1)*cosW);const b2=A*((A+1)+(A-1)*cosW-2*Math.sqrt(A)*alpha);const a0=(A+1)-(A-1)*cosW+2*Math.sqrt(A)*alpha;const a1=2*((A-1)-(A+1)*cosW);const a2=(A+1)-(A-1)*cosW-2*Math.sqrt(A)*alpha;this.exciterState.b0=b0/a0;this.exciterState.b1=b1/a0;this.exciterState.b2=b2/a0;this.exciterState.a1=a1/a0;this.exciterState.a2=a2/a0;}
+      processExciter(s){const b=this.exciterState;const y=b.b0*s+b.b1*b.x1+b.b2*b.x2-b.a1*b.y1-b.a2*b.y2;b.x2=b.x1;b.x1=s;b.y2=b.y1;b.y1=y;return y;}
+      
+      compressSample(signal,threshold,ratio,attack,release,envelope,gain){
+        const absSig=Math.abs(signal);const atkCoeff=Math.exp(-1/(attack*0.001*this.sampleRate));const relCoeff=Math.exp(-1/(release*0.001*this.sampleRate));
+        if(absSig>envelope)envelope=atkCoeff*envelope+(1-atkCoeff)*absSig;else envelope=relCoeff*envelope+(1-relCoeff)*absSig;
+        const linThresh=Math.pow(10,threshold/20);
+        if(envelope>linThresh){const overshoot=envelope/linThresh;const logOvershoot=Math.log10(overshoot);const reduction=Math.pow(10,-logOvershoot*(1-1/ratio));gain=Math.min(gain,reduction);}else{const relSlow=Math.exp(-1/(release*3*0.001*this.sampleRate));gain=Math.min(1,gain+(1-gain)*(1-relSlow));}
+        return{envelope,gain,output:signal*gain};
+      }
+      
+      handleMessage(data){switch(data.type){
+        case'param':this.setParam(data.key,data.value);break;
+        case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;
+        case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;
+        case'geqMaster':this.geqMasterEnabled=data.enabled;break;
+        case'compInput':this.compInput=Math.pow(10,data.value/20);break;
+        case'compThreshold':this.compThreshold=data.value;break;case'compRatio':this.compRatio=data.value;break;
+        case'compAttack':this.compAttack=data.value;break;case'compRelease':this.compRelease=data.value;break;
+        case'compKnee':this.compKnee=data.value;break;case'compMakeup':this.compMakeup=Math.pow(10,data.value/20);break;
+        case'compOutput':this.compOutput=Math.pow(10,data.value/20);break;case'compEnabled':this.compEnabled=data.enabled;break;
+        case'finalLimiter':Object.assign(this.finalLimiter,data.params);break;case'finalLimiterEnabled':this.finalLimiterEnabled=data.enabled;break;
+        case'preEmphasis':this.preEmphasisTime=data.value;break;case'preEmphasisGain':this.preEmphasisGain=data.value;break;
+        case'preEmphasisEnabled':this.preEmphasisEnabled=data.enabled;break;
+        // Power Module
+        case'pwInput':this.pwInput=Math.pow(10,data.value/20);break;case'pwOutput':this.pwOutput=Math.pow(10,data.value/20);break;
+        case'pwEnabled':this.powerEnabled=data.enabled;break;
+        case'pwAgcThresh':this.pwAgcTh=data.value;break;case'pwAgcRatio':this.pwAgcR=data.value;break;
+        case'pwCompThresh':this.pwCompTh=data.value;break;case'pwCompRatio':this.pwCompR=data.value;break;
+        case'pwLimiterThresh':this.pwLimTh=data.value;break;case'pwLimiterRatio':this.pwLimR=data.value;break;
+        case'pwScHPF':this.pwScHPF=data.value;break;case'pwScMix':this.pwScMix=data.value/100;break;
+        case'pwBassFreq':this.pwBassFreq=data.value;this.updateBassFilter();break;case'pwBassAmt':this.pwBassAmt=data.value;this.updateBassFilter();break;
+        case'pwExciteFreq':this.pwExciteFreq=data.value;this.updateExciterFilter();break;case'pwExciteAmt':this.pwExciteAmt=data.value;this.updateExciterFilter();break;
+        case'pwClipMode':this.pwClipMode=data.value;break;case'pwClipThresh':this.pwClipThresh=Math.pow(10,data.value/20);break;
+        case'pwMultiband':if(this.pwMultiband[data.index]){Object.assign(this.pwMultiband[data.index],data.params);this.initPwCrossovers();}break;
+      }}
       setParam(key,value){switch(key){case'inputGain':this.inputGain=Math.pow(10,value/20);break;case'inputPan':this.inputPan=value/100;break;case'outputGain':this.outputGain=Math.pow(10,value/20);break;case'outputLimit':this.outputLimit=value/100;break;case'stereoMode':this.stereoMode=value;break;case'stereoWidth':this.stereoWidth=value/100;break;case'stereoBalance':this.stereoBalance=value/100;break;case'saturation':this.saturationAmount=value;break;}}
-      initCrossovers3(which){const bands=this[which];const freqs=bands.map(b=>b.freq);for(let i=0;i<bands.length;i++){const b=bands[i];b.lowFilter=this.createFilter('lowpass',freqs[i]);b.highFilter=this.createFilter('highpass',freqs[i]);}}
-      createFilter(type,freq){const rc=1/(2*Math.PI*freq);const dt=1/this.sampleRate;const alpha=dt/(rc+dt);return{type,alpha,stateL:0,stateR:0};}
-      processFilter(filter,xL,xR){if(!filter)return{yL:xL,yR:xR};if(filter.type==='lowpass'){const yL=filter.stateL+filter.alpha*(xL-filter.stateL);const yR=filter.stateR+filter.alpha*(xR-filter.stateR);filter.stateL=yL;filter.stateR=yR;return{yL,yR};}else{const lpL=filter.stateL+filter.alpha*(xL-filter.stateL);const lpR=filter.stateR+filter.alpha*(xR-filter.stateR);filter.stateL=lpL;filter.stateR=lpR;return{yL:xL-lpL,yR:xR-lpR};}}
-      compressSample(signal,threshold,ratio,attack,release,envelope,gain){const absSig=Math.abs(signal);const atkCoeff=Math.exp(-1/(attack*0.001*this.sampleRate));const relCoeff=Math.exp(-1/(release*0.001*this.sampleRate));if(absSig>envelope)envelope=atkCoeff*envelope+(1-atkCoeff)*absSig;else envelope=relCoeff*envelope+(1-relCoeff)*absSig;const linThresh=Math.pow(10,threshold/20);if(envelope>linThresh){const overshoot=envelope/linThresh;const logOvershoot=Math.log10(overshoot);const reduction=Math.pow(10,-logOvershoot*(1-1/ratio));gain=Math.min(gain,reduction);}else{const relSlow=Math.exp(-1/(release*3*0.001*this.sampleRate));gain=Math.min(1,gain+(1-gain)*(1-relSlow));}return{envelope,gain,output:signal*gain};}
+      
       applySaturation(x){if(this.saturationAmount<=0)return x;const s=this.saturationAmount;return Math.tanh(x*(1+s))/Math.tanh(1+s);}
       processPreEmphasis(x){if(this.preEmphasisGain<=0)return x;const tau=this.preEmphasisTime===0?50e-6:75e-6;const dt=1/this.sampleRate;const alpha=dt/(tau+dt);const result=x+this.preEmphasisGain*(x-this.preEmphState)*alpha;this.preEmphState=x;return result;}
-      process(inputs,outputs){const input=inputs[0],output=outputs[0];if(!input||!input[0]||!output||!output[0])return true;const inL=input[0],inR=input.length>1?input[1]:input[0];const outL=output[0],outR=output.length>1?output[1]:output[0];const blockSize=inL.length;let clipDetected=false,peakIL=0,peakIR=0,peakOL=0,peakOR=0,rmsIL=0,rmsIR=0,rmsOL=0,rmsOR=0;
-      for(let i=0;i<blockSize;i++){let sL=inL[i],sR=inR[i];peakIL=Math.max(peakIL,Math.abs(sL));peakIR=Math.max(peakIR,Math.abs(sR));rmsIL+=sL*sL;rmsIR+=sR*sR;
-      sL*=this.inputGain;sR*=this.inputGain;if(this.inputPan!==0){const pL=Math.cos((this.inputPan+1)*Math.PI/4),pR=Math.sin((this.inputPan+1)*Math.PI/4);sL=sL*pL+sR*(1-Math.abs(pL));sR=sR*pR+sL*(1-Math.abs(pR));}
-      if(this.geqMasterEnabled){const eq=this.processGEQ(sL,sR);sL=eq.yL;sR=eq.yR;}
-      if(this.saturationAmount>0){sL=this.applySaturation(sL);sR=this.applySaturation(sR);}
-      if(this.comp3MasterEnabled){for(let b=0;b<this.comp3.length;b++){const band=this.comp3[b];if(band.enabled&&band.lowFilter&&band.highFilter){let lo=this.processFilter(band.lowFilter,sL,sR);let hi=this.processFilter(band.highFilter,lo.yL,lo.yR);const mixed=(hi.yL+hi.yR)/2;const r=this.compressSample(mixed,band.threshold,band.ratio,band.attack,band.release,band.envelope,band.g);band.envelope=r.envelope;band.g=r.gain;const gf=band.g*Math.pow(10,band.gain/20);sL=lo.yL+hi.yL*gf;sR=lo.yR+hi.yR*gf;}}}
-      if(this.finalLimiterEnabled&&this.finalLimiter.enabled){const fl=this.finalLimiter;const mixed=(sL+sR)/2;const r=this.compressSample(mixed,fl.threshold,fl.ratio,fl.attack,fl.release,fl.envelope,fl.g);fl.envelope=r.envelope;fl.g=r.gain;const gf=fl.g*Math.pow(10,fl.gain/20);sL*=gf;sR*=gf;}
-      if(this.powerLimiterEnabled&&this.powerLimiter.enabled){const pl=this.powerLimiter;const mixed=(sL+sR)/2;const r=this.compressSample(mixed,pl.threshold,pl.ratio,pl.attack,pl.release,pl.envelope,pl.g);pl.envelope=r.envelope;pl.g=r.gain;const gf=pl.g*Math.pow(10,pl.gain/20);sL*=gf;sR*=gf;}
-      if(this.antiClipEnabled){const mx=Math.max(Math.abs(sL),Math.abs(sR));if(mx>1){sL/=mx;sR/=mx;clipDetected=true;}}else{if(Math.abs(sL)>1){sL=Math.sign(sL);clipDetected=true;}if(Math.abs(sR)>1){sR=Math.sign(sR);clipDetected=true;}}
-      if(this.preEmphasisEnabled&&this.preEmphasisGain>0){sL=this.processPreEmphasis(sL);sR=this.processPreEmphasis(sR);}
-      if(this.stereoMode===1){const m=(sL+sR)/2;sL=m;sR=m;}else if(this.stereoMode===2){const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}else{const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}
-      if(this.stereoBalance!==0){if(this.stereoBalance>0)sR*=(1-this.stereoBalance);else sL*=(1+this.stereoBalance);}
-      sL*=this.outputGain*this.outputLimit;sR*=this.outputGain*this.outputLimit;sL=Math.max(-1,Math.min(1,sL));sR=Math.max(-1,Math.min(1,sR));
-      peakOL=Math.max(peakOL,Math.abs(sL));peakOR=Math.max(peakOR,Math.abs(sR));rmsOL+=sL*sL;rmsOR+=sR*sR;
-      if(this.spectrumIdx<this.spectrumBuffer.length){this.spectrumBuffer[this.spectrumIdx]=sL;this.spectrumIdx++;}
-      outL[i]=sL;outR[i]=sR;}
-      this.frameCounter+=blockSize;if(this.frameCounter>=this.meterUpdateInterval){this.frameCounter=0;const rmsToDb=(rms,n)=>20*Math.log10(Math.max(Math.sqrt(rms/n),1e-10));this.meterInputL=rmsToDb(rmsIL,blockSize);this.meterInputR=rmsToDb(rmsIR,blockSize);this.meterOutputL=rmsToDb(rmsOL,blockSize);this.meterOutputR=rmsToDb(rmsOR,blockSize);this.meterPeakIL=20*Math.log10(Math.max(peakIL,1e-10));this.meterPeakIR=20*Math.log10(Math.max(peakIR,1e-10));this.meterPeakOL=20*Math.log10(Math.max(peakOL,1e-10));this.meterPeakOR=20*Math.log10(Math.max(peakOR,1e-10));this.port.postMessage({type:'meters',meters:{inputL:this.meterInputL,inputR:this.meterInputR,outputL:this.meterOutputL,outputR:this.meterOutputR},peaks:{inputL:this.meterPeakIL,inputR:this.meterPeakIR,outputL:this.meterPeakOL,outputR:this.meterPeakOR}});if(this.spectrumIdx>0){const spec=this.computeSpectrum(this.spectrumBuffer.slice(0,this.spectrumIdx));this.spectrumIdx=0;this.port.postMessage({type:'spectrum',spectrum:spec});}this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});this.port.postMessage({type:'gr',gr:{finalLimiter:this.finalLimiter.enabled?20*Math.log10(Math.max(this.finalLimiter.g,1e-10)):0,powerLimiter:this.powerLimiter.enabled?20*Math.log10(Math.max(this.powerLimiter.g,1e-10)):0}});if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
+      
+      process(inputs,outputs){
+        const input=inputs[0],output=outputs[0];if(!input||!input[0]||!output||!output[0])return true;
+        const inL=input[0],inR=input.length>1?input[1]:input[0];const outL=output[0],outR=output.length>1?output[1]:output[0];
+        const blockSize=inL.length;let clipDetected=false,peakIL=0,peakIR=0,peakOL=0,peakOR=0,rmsIL=0,rmsIR=0,rmsOL=0,rmsOR=0;
+        for(let i=0;i<blockSize;i++){
+          let sL=inL[i],sR=inR[i];peakIL=Math.max(peakIL,Math.abs(sL));peakIR=Math.max(peakIR,Math.abs(sR));rmsIL+=sL*sL;rmsIR+=sR*sR;
+          sL*=this.inputGain;sR*=this.inputGain;
+          if(this.inputPan!==0){const pL=Math.cos((this.inputPan+1)*Math.PI/4),pR=Math.sin((this.inputPan+1)*Math.PI/4);sL=sL*pL+sR*(1-Math.abs(pL));sR=sR*pR+sL*(1-Math.abs(pR));}
+          if(this.geqMasterEnabled){const eq=this.processGEQ(sL,sR);sL=eq.yL;sR=eq.yR;}
+          if(this.saturationAmount>0){sL=this.applySaturation(sL);sR=this.applySaturation(sR);}
+          if(this.compEnabled){const c=this.processComp(sL,sR);sL=c.yL;sR=c.yR;sL*=this.compInput;sR*=this.compInput;sL*=this.compOutput;sR*=this.compOutput;}
+          if(this.finalLimiterEnabled&&this.finalLimiter.enabled){const fl=this.finalLimiter;const mixed=(sL+sR)/2;const r=this.compressSample(mixed,fl.threshold,fl.ratio,fl.attack,fl.release,fl.envelope,fl.g);fl.envelope=r.envelope;fl.g=r.gain;const gf=fl.g*Math.pow(10,fl.gain/20);sL*=gf;sR*=gf;}
+          
+          // === POWER MODULE ===
+          if(this.powerEnabled){
+            sL*=this.pwInput;sR*=this.pwInput;
+            
+            // 1. Sidechain + Multiband Compressor
+            const mixed=(sL+sR)/2;
+            const scHPF=Math.exp(-1/(1000*0.001*this.sampleRate)); // Simple HPF for voice detection
+            const scMixed=mixed*(1-this.pwScMix)+this.pwScMix*Math.abs(mixed);
+            
+            // Multiband processing
+            let mbOutL=0,mbOutR=0;
+            let prevLP_L=sL,prevLP_R=sR;
+            for(let b=0;b<this.pwMultiband.length;b++){
+              const band=this.pwMultiband[b];
+              if(!band.enabled){mbOutL+=prevLP_L;mbOutR+=prevLP_R;continue;}
+              let bandL,bandR;
+              if(b<this.pwMultiband.length-1){
+                bandL=this.processLP(band.lp,sL);bandR=this.processLP(band.lp,sR);
+                sL=this.processHP(band.hp,sL);sR=this.processHP(band.hp,sR);
+              } else {bandL=prevLP_L;bandR=prevLP_R;}
+              
+              const sig=(bandL+bandR)/2;
+              const r=this.compressSample(sig,band.th,band.ratio,band.atk,band.rel,band.env,band.g);
+              band.env=r.envelope;band.g=r.gain;
+              const gf=band.g*band.gn;
+              mbOutL+=bandL*gf;mbOutR+=bandR*gf;
+              prevLP_L=bandL;prevLP_R=bandR;
+            }
+            sL=mbOutL;sR=mbOutR;
+            
+            // 2. AGC
+            const agcR=this.compressSample((sL+sR)/2,this.pwAgcTh,this.pwAgcR,20,100,this.pwAgcEnv,this.pwAgcG);
+            this.pwAgcEnv=agcR.envelope;this.pwAgcG=agcR.gain;sL*=this.pwAgcG;sR*=this.pwAgcG;
+            
+            // 3. Compressor
+            const cR=this.compressSample((sL+sR)/2,this.pwCompTh,this.pwCompR,10,60,this.pwCompEnv,this.pwCompG);
+            this.pwCompEnv=cR.envelope;this.pwCompG=cR.gain;sL*=this.pwCompG;sR*=this.pwCompG;
+            
+            // 4. Limiter
+            const lR=this.compressSample((sL+sR)/2,this.pwLimTh,this.pwLimR,0.5,50,this.pwLimEnv,this.pwLimG);
+            this.pwLimEnv=lR.envelope;this.pwLimG=lR.gain;sL*=this.pwLimG;sR*=this.pwLimG;
+            
+            // 5. Bass Enhancer
+            sL+=this.processBass(sL)*0.3;sR+=this.processBass(sR)*0.3;
+            
+            // 6. Exciter (harmonics via saturation of highs)
+            const exL=this.processExciter(sL);const exR=this.processExciter(sR);
+            sL+=exL*0.2;sR+=exR*0.2;
+            
+            // 7. Clipping Control
+            const clipTh=this.pwClipThresh;
+            if(this.pwClipMode===0){} // None
+            else if(this.pwClipMode===1){ // Soft Clip
+              sL=Math.tanh(sL/clipTh)*clipTh;sR=Math.tanh(sR/clipTh)*clipTh;
+            } else { // Hard Clip
+              sL=Math.max(-clipTh,Math.min(clipTh,sL));sR=Math.max(-clipTh,Math.min(clipTh,sR));
+            }
+            
+            sL*=this.pwOutput;sR*=this.pwOutput;
+          }
+          
+          if(this.antiClipEnabled){const mx=Math.max(Math.abs(sL),Math.abs(sR));if(mx>1){sL/=mx;sR/=mx;clipDetected=true;}}else{if(Math.abs(sL)>1){sL=Math.sign(sL);clipDetected=true;}if(Math.abs(sR)>1){sR=Math.sign(sR);clipDetected=true;}}
+          if(this.preEmphasisEnabled&&this.preEmphasisGain>0){sL=this.processPreEmphasis(sL);sR=this.processPreEmphasis(sR);}
+          if(this.stereoMode===1){const m=(sL+sR)/2;sL=m;sR=m;}else if(this.stereoMode===2){const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}else{const m=(sL+sR)/2,sd=(sL-sR)/2;sL=m+sd*this.stereoWidth;sR=m-sd*this.stereoWidth;}
+          if(this.stereoBalance!==0){if(this.stereoBalance>0)sR*=(1-this.stereoBalance);else sL*=(1+this.stereoBalance);}
+          sL*=this.outputGain*this.outputLimit;sR*=this.outputGain*this.outputLimit;sL=Math.max(-1,Math.min(1,sL));sR=Math.max(-1,Math.min(1,sR));
+          peakOL=Math.max(peakOL,Math.abs(sL));peakOR=Math.max(peakOR,Math.abs(sR));rmsOL+=sL*sL;rmsOR+=sR*sR;
+          if(this.spectrumIdx<this.spectrumBuffer.length){this.spectrumBuffer[this.spectrumIdx]=sL;this.spectrumIdx++;}
+          outL[i]=sL;outR[i]=sR;
+        }
+        this.frameCounter+=blockSize;if(this.frameCounter>=this.meterUpdateInterval){this.frameCounter=0;
+        const rmsToDb=(rms,n)=>20*Math.log10(Math.max(Math.sqrt(rms/n),1e-10));
+        this.meterInputL=rmsToDb(rmsIL,blockSize);this.meterInputR=rmsToDb(rmsIR,blockSize);this.meterOutputL=rmsToDb(rmsOL,blockSize);this.meterOutputR=rmsToDb(rmsOR,blockSize);
+        this.meterPeakIL=20*Math.log10(Math.max(peakIL,1e-10));this.meterPeakIR=20*Math.log10(Math.max(peakIR,1e-10));this.meterPeakOL=20*Math.log10(Math.max(peakOL,1e-10));this.meterPeakOR=20*Math.log10(Math.max(peakOR,1e-10));
+        this.port.postMessage({type:'meters',meters:{inputL:this.meterInputL,inputR:this.meterInputR,outputL:this.meterOutputL,outputR:this.meterOutputR},peaks:{inputL:this.meterPeakIL,inputR:this.meterPeakIR,outputL:this.meterPeakOL,outputR:this.meterPeakOR}});
+        if(this.spectrumIdx>0){const spec=this.computeSpectrum(this.spectrumBuffer.slice(0,this.spectrumIdx));this.spectrumIdx=0;this.port.postMessage({type:'spectrum',spectrum:spec});}
+        this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});
+        this.port.postMessage({type:'gr',comp:20*Math.log10(Math.max(this.compGain,1e-10)),finalLimiter:this.finalLimiter.enabled?20*Math.log10(Math.max(this.finalLimiter.g,1e-10)):0,pw:this.powerEnabled?Math.max(20*Math.log10(Math.max(this.pwLimG,1e-10)),20*Math.log10(Math.max(this.pwAgcG,1e-10))):0});
+        if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
+        
+      processComp(sL,sR){const atkCoeff=Math.exp(-1/(this.compAttack*0.001*this.sampleRate));const relCoeff=Math.exp(-1/(this.compRelease*0.001*this.sampleRate));if((Math.abs(sL)+Math.abs(sR))/2>this.compEnvelope)this.compEnvelope=atkCoeff*this.compEnvelope+(1-atkCoeff)*(Math.abs(sL)+Math.abs(sR))/2;else this.compEnvelope=relCoeff*this.compEnvelope+(1-relCoeff)*(Math.abs(sL)+Math.abs(sR))/2;let reduction=1.0;if(this.compEnvelope>0){const envDb=20*Math.log10(this.compEnvelope);const threshDb=this.compThreshold;const kneeHalf=this.compKnee/2;if(envDb>threshDb+kneeHalf){const overDb=envDb-threshDb;const compDb=overDb/this.compRatio;const gainDb=envDb-compDb;reduction=Math.pow(10,gainDb/20)/this.compEnvelope;}else if(envDb>threshDb-kneeHalf){const kneeDb=envDb-threshDb+kneeHalf;const compDb=(kneeDb*kneeDb)/(4*kneeHalf)/this.compRatio;const gainDb=envDb-compDb;reduction=Math.pow(10,gainDb/20)/this.compEnvelope;}else{reduction=1.0;}}const relSlow=Math.exp(-1/(this.compRelease*3*0.001*this.sampleRate));this.compGain=Math.min(this.compGain,reduction);this.compGain=Math.min(1,this.compGain+(1-this.compGain)*(1-relSlow));const makeup=this.compMakeup;return{yL:sL*this.compGain*makeup,yR:sR*this.compGain*makeup};}
       computeSpectrum(buffer){const N=buffer.length,result=new Float32Array(128),bands=128;for(let b=0;b<bands;b++){const freq=20*Math.pow(1000,b/bands);const k=Math.round(freq*N/this.sampleRate);if(k<1||k>=N/2)continue;let re=0,im=0;const omega=2*Math.PI*k/N;for(let i=0;i<N;i++){re+=buffer[i]*Math.cos(omega*i);im-=buffer[i]*Math.sin(omega*i);}const energy=Math.sqrt(re*re+im*im)/N;result[b]=20*Math.log10(Math.max(energy,1e-10));}return result;}
       computeEQCurve(){const points=128,curve=new Float32Array(points),sr=this.sampleRate;for(let i=0;i<points;i++){const freq=20*Math.pow(1000,i/points);let response=0;for(let j=0;j<31;j++){if(Math.abs(this.geqGains[j])<0.01)continue;const f=this.geqFilters[j];const omega=2*Math.PI*freq/sr;const cosW=Math.cos(omega),sinW=Math.sin(omega),cos2W=Math.cos(2*omega),sin2W=Math.sin(2*omega);const numRe=f.b0+f.b1*cosW+f.b2*cos2W,numIm=f.b1*sinW+f.b2*sin2W;const denRe=1+f.a1*cosW+f.a2*cos2W,denIm=f.a1*sinW+f.a2*sin2W;const mag=Math.sqrt((numRe*numRe+numIm*numIm)/(denRe*denRe+denIm*denIm));response+=20*Math.log10(Math.max(mag,1e-10));}curve[i]=response;}return curve;}
     }
@@ -296,25 +503,52 @@ class BroadcastProcessor {
     if (!this.audioWorklet) return;
     const p = this.params, port = this.audioWorklet.port;
     for (let i = 0; i < 31; i++) port.postMessage({ type: 'geq', index: i, value: p.geq[i] });
-    p.comp3.forEach((band, i) => port.postMessage({ type: 'comp3', index: i, params: band }));
+    port.postMessage({ type: 'geqMaster', enabled: p.geqMaster?.enabled ?? true });
+    port.postMessage({ type: 'compInput', value: p.comp.input });
+    port.postMessage({ type: 'compThreshold', value: p.comp.threshold });
+    port.postMessage({ type: 'compRatio', value: p.comp.ratio });
+    port.postMessage({ type: 'compAttack', value: p.comp.attack });
+    port.postMessage({ type: 'compRelease', value: p.comp.release });
+    port.postMessage({ type: 'compKnee', value: p.comp.knee });
+    port.postMessage({ type: 'compMakeup', value: p.comp.makeup });
+    port.postMessage({ type: 'compOutput', value: p.comp.output });
+    port.postMessage({ type: 'compEnabled', enabled: p.comp.enabled });
     port.postMessage({ type: 'finalLimiter', params: p.finalLimiter });
-    port.postMessage({ type: 'powerLimiter', params: p.powerLimiter });
+    port.postMessage({ type: 'finalLimiterEnabled', enabled: p.finalLimiter?.enabled ?? true });
     port.postMessage({ type: 'preEmphasis', value: p.preEmphasis.time });
     port.postMessage({ type: 'preEmphasisGain', value: p.preEmphasis.gain });
-    Object.keys(p).forEach(key => { if (!['geq', 'geqMaster', 'comp3', 'comp3Master', 'finalLimiter', 'powerLimiter', 'preEmphasis', 'mode', 'inputDevice', 'outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
-    port.postMessage({ type: 'geqMaster', enabled: p.geqMaster?.enabled ?? true });
-    port.postMessage({ type: 'comp3Master', enabled: p.comp3Master?.enabled ?? true });
-    port.postMessage({ type: 'finalLimiterEnabled', enabled: p.finalLimiter?.enabled ?? true });
-    port.postMessage({ type: 'powerLimiterEnabled', enabled: p.powerLimiter?.enabled ?? true });
     port.postMessage({ type: 'preEmphasisEnabled', enabled: p.preEmphasis?.enabled ?? true });
+    // Power Module
+    port.postMessage({ type: 'pwInput', value: p.pw.input });
+    port.postMessage({ type: 'pwOutput', value: p.pw.output });
+    port.postMessage({ type: 'pwEnabled', enabled: p.pw.enabled });
+    port.postMessage({ type: 'pwAgcThresh', value: p.pw.agcThresh });
+    port.postMessage({ type: 'pwAgcRatio', value: p.pw.agcRatio });
+    port.postMessage({ type: 'pwCompThresh', value: p.pw.compThresh });
+    port.postMessage({ type: 'pwCompRatio', value: p.pw.compRatio });
+    port.postMessage({ type: 'pwLimiterThresh', value: p.pw.limiterThresh });
+    port.postMessage({ type: 'pwLimiterRatio', value: p.pw.limiterRatio });
+    port.postMessage({ type: 'pwScHPF', value: p.pw.scHPF });
+    port.postMessage({ type: 'pwScMix', value: p.pw.scMix });
+    port.postMessage({ type: 'pwBassFreq', value: p.pw.bassFreq });
+    port.postMessage({ type: 'pwBassAmt', value: p.pw.bassAmt });
+    port.postMessage({ type: 'pwExciteFreq', value: p.pw.exciteFreq });
+    port.postMessage({ type: 'pwExciteAmt', value: p.pw.exciteAmt });
+    port.postMessage({ type: 'pwClipMode', value: p.pw.clipMode });
+    port.postMessage({ type: 'pwClipThresh', value: p.pw.clipThresh });
+    p.pw.multiband.forEach((band, i) => port.postMessage({ type: 'pwMultiband', index: i, params: band }));
+    Object.keys(p).forEach(key => { if (!['geq','geqMaster','comp','finalLimiter','preEmphasis','pw','mode','inputDevice','outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
   }
 
   sendParam(key, value) { if (!this.audioWorklet) return; this.params[key] = value; this.audioWorklet.port.postMessage({ type: 'param', key, value }); }
   sendGEQ(index, value) { if (!this.audioWorklet) return; this.params.geq[index] = value; this.audioWorklet.port.postMessage({ type: 'geq', index, value }); this.updateGEQValue(index); this.drawEQCurve(); }
   resetGEQ() { this.params.geq.fill(0); for (let i = 0; i < 31; i++) { this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: 0 }); this.updateGEQValue(i); } this.drawEQCurve(); }
-  sendComp3(index, params) { if (!this.audioWorklet) return; Object.assign(this.params.comp3[index], params); this.audioWorklet.port.postMessage({ type: 'comp3', index, params }); }
+  sendComp(key, value) { if (!this.audioWorklet) return; this.params.comp[key] = value; this.audioWorklet.port.postMessage({ type: `comp${key.charAt(0).toUpperCase() + key.slice(1)}`, value }); }
+  sendCompEnabled() { if (!this.audioWorklet) return; this.audioWorklet.port.postMessage({ type: 'compEnabled', enabled: this.params.comp.enabled }); }
   sendFinalLimiter(params) { if (!this.audioWorklet) return; Object.assign(this.params.finalLimiter, params); this.audioWorklet.port.postMessage({ type: 'finalLimiter', params }); }
-  sendPowerLimiter(params) { if (!this.audioWorklet) return; Object.assign(this.params.powerLimiter, params); this.audioWorklet.port.postMessage({ type: 'powerLimiter', params }); }
+  sendPw(key, value) { if (!this.audioWorklet) return; const k = key.replace('pw',''); this.params.pw[k] = value; const cap = k.charAt(0).toUpperCase() + k.slice(1); this.audioWorklet.port.postMessage({ type: `pw${cap}`, value }); }
+  sendMultiband(index, params) { if (!this.audioWorklet) return; Object.assign(this.params.pw.multiband[index], params); this.audioWorklet.port.postMessage({ type: 'pwMultiband', index, params }); }
+  sendPwEnabled() { if (!this.audioWorklet) return; this.audioWorklet.port.postMessage({ type: 'pwEnabled', enabled: this.params.pw.enabled }); }
 
   updateMeters() {
     const m = this.meters, p = this.peaks;
@@ -330,8 +564,9 @@ class BroadcastProcessor {
   }
 
   updateGRMeters(gr) {
+    document.getElementById('compGrMeter').style.width = Math.max(0, Math.min(100, Math.abs(gr.comp) / 40 * 100)) + '%';
     document.getElementById('limGrMeter').style.width = Math.max(0, Math.min(100, Math.abs(gr.finalLimiter) / 40 * 100)) + '%';
-    document.getElementById('powLimGrMeter').style.width = Math.max(0, Math.min(100, Math.abs(gr.powerLimiter) / 40 * 100)) + '%';
+    document.getElementById('pwGrMeter').style.width = Math.max(0, Math.min(100, Math.abs(gr.pw) / 40 * 100)) + '%';
   }
 
   initSpectrum() { this.canvas = document.getElementById('spectrumCanvas'); this.ctx = this.canvas.getContext('2d'); this.resizeCanvas(); window.addEventListener('resize', () => this.resizeCanvas()); this.drawSpectrum(); }
@@ -362,9 +597,9 @@ class BroadcastProcessor {
   initBypassButtons() {
     const map = {
       'geq': () => { this.params.geqMaster.enabled = !this.params.geqMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'geqMaster', enabled: this.params.geqMaster.enabled }); },
-      'comp3': () => { this.params.comp3Master.enabled = !this.params.comp3Master.enabled; this.audioWorklet?.port.postMessage({ type: 'comp3Master', enabled: this.params.comp3Master.enabled }); },
+      'comp': () => { this.params.comp.enabled = !this.params.comp.enabled; this.sendCompEnabled(); },
       'finalLimiter': () => { this.params.finalLimiter.enabled = !this.params.finalLimiter.enabled; this.audioWorklet?.port.postMessage({ type: 'finalLimiterEnabled', enabled: this.params.finalLimiter.enabled }); },
-      'powerLimiter': () => { this.params.powerLimiter.enabled = !this.params.powerLimiter.enabled; this.audioWorklet?.port.postMessage({ type: 'powerLimiterEnabled', enabled: this.params.powerLimiter.enabled }); },
+      'power': () => { this.params.pw.enabled = !this.params.pw.enabled; this.sendPwEnabled(); },
       'preEmphasis': () => { this.params.preEmphasis.enabled = !this.params.preEmphasis.enabled; this.audioWorklet?.port.postMessage({ type: 'preEmphasisEnabled', enabled: this.params.preEmphasis.enabled }); }
     };
     document.querySelectorAll('.bypass-btn').forEach(btn => { btn.addEventListener('click', () => { const m = btn.dataset.module; if (map[m]) map[m](); btn.classList.toggle('active'); btn.textContent = btn.classList.contains('active') ? 'ACTIVE' : 'BYPASS'; }); });
@@ -405,7 +640,7 @@ class BroadcastProcessor {
     valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888';
   }
 
-  initKnobs() { this.initStandardKnobs(); this.initComp3Knobs(); this.initFinalLimiterKnobs(); this.initPowerLimiterKnobs(); }
+  initKnobs() { this.initStandardKnobs(); this.initCompKnobs(); this.initFinalLimiterKnobs(); this.initMultibandKnobs(); }
 
   initStandardKnobs() {
     document.querySelectorAll('.knob-wrapper').forEach(wrapper => {
@@ -426,9 +661,12 @@ class BroadcastProcessor {
         else if (param === 'preEmphasis') dv = currentValue === 0 ? '50μs' : '75μs';
         else if (param === 'stereoMode') dv = ['ST', 'MO', 'MX'][Math.round(currentValue)];
         else if (param === 'inputPhase') dv = currentValue === 0 ? 'NOR' : 'REV';
+        else if (param === 'pwClipMode') dv = ['OFF','SOFT','HARD'][Math.round(currentValue)];
         else dv = currentValue.toFixed(1);
         if (valueDisplay) valueDisplay.textContent = dv;
-        if (!param.startsWith('eq_')) this.sendParam(param, currentValue);
+        if (param.startsWith('pw')) this.sendPw(param, currentValue);
+        else if (param.startsWith('comp')) this.sendComp(param.replace('comp', '').toLowerCase(), currentValue);
+        else if (!param.startsWith('eq_')) this.sendParam(param, currentValue);
       };
       wrapper.addEventListener('mousedown', (e) => { isDragging = true; startY = e.clientY; startValue = currentValue; e.preventDefault(); });
       window.addEventListener('mousemove', (e) => { if (!isDragging) return; updateValue(startValue + (startY - e.clientY) * ((max - min) / 200)); });
@@ -442,14 +680,48 @@ class BroadcastProcessor {
     });
   }
 
-  initComp3Knobs() {
-    const container = document.getElementById('comp3Knobs'); if (!container) return;
-    let html = '';
-    this.params.comp3.forEach((band, i) => { html += `<div class="band-section"><div class="band-title">${band.name} (Split: ${band.freq} Hz)</div><div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;"><button class="toggle-btn ${band.enabled ? '' : 'active'}" data-c3band="${i}" data-c3tgl="enabled">${band.enabled ? 'ON' : 'OFF'}</button></div><div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="c3_freq_${i}" data-min="40" data-max="16000" data-default="${band.freq}" id="c3_freq_${i}"><div class="knob small"></div></div><div class="knob-value">${band.freq >= 1000 ? (band.freq / 1000).toFixed(1) + 'k' : band.freq}</div><div class="knob-label">Freq</div></div><div class="knob-container"><div class="knob-wrapper" data-param="c3_thr_${i}" data-min="-60" data-max="0" data-default="${band.threshold}" id="c3_thr_${i}"><div class="knob small"></div></div><div class="knob-value">${band.threshold} dB</div><div class="knob-label">Threshold</div></div><div class="knob-container"><div class="knob-wrapper" data-param="c3_rat_${i}" data-min="1" data-max="20" data-default="${band.ratio}" id="c3_rat_${i}"><div class="knob small"></div></div><div class="knob-value">${band.ratio}:1</div><div class="knob-label">Ratio</div></div><div class="knob-container"><div class="knob-wrapper" data-param="c3_atk_${i}" data-min="0.1" data-max="200" data-default="${band.attack}" id="c3_atk_${i}"><div class="knob small"></div></div><div class="knob-value">${band.attack} ms</div><div class="knob-label">Attack</div></div><div class="knob-container"><div class="knob-wrapper" data-param="c3_rel_${i}" data-min="10" data-max="2000" data-default="${band.release}" id="c3_rel_${i}"><div class="knob small"></div></div><div class="knob-value">${band.release} ms</div><div class="knob-label">Release</div></div><div class="knob-container"><div class="knob-wrapper" data-param="c3_gn_${i}" data-min="-12" data-max="12" data-default="${band.gain}" id="c3_gn_${i}"><div class="knob small"></div></div><div class="knob-value">${band.gain} dB</div><div class="knob-label">Gain</div></div></div></div>`; });
+  initCompKnobs() {
+    const comp = this.params.comp;
+    ['compInput','compThreshold','compRatio','compAttack','compRelease','compKnee','compMakeup','compOutput'].forEach(id => {
+      const wrapper = document.getElementById(id);
+      if(wrapper) { const knob = wrapper.querySelector('.knob'); const param = id.replace('comp','').toLowerCase(); const min = parseFloat(wrapper.dataset.min), max = parseFloat(wrapper.dataset.max); let val = comp[param]; let angle = ((val - min) / (max - min)) * 270 - 135; knob.style.setProperty('--knob-angle', angle + 'deg'); }
+    });
+  }
+
+  initMultibandKnobs() {
+    const container = document.getElementById('pwMultibandKnobs'); if (!container) return;
+    let html = '<div class="mb-bands-container">';
+    this.params.pw.multiband.forEach((band, i) => {
+      html += `<div class="mb-band"><div class="mb-band-title">${band.name} (${band.freq}Hz)</div><div class="knobs-grid" style="gap:4px;">
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwMbThresh${i}" data-min="-40" data-max="0" data-default="${band.threshold}" id="pwMbThresh${i}"><div class="knob small"></div></div><div class="knob-value">${band.threshold}dB</div><div class="knob-label">Thresh</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwMbRatio${i}" data-min="1" data-max="10" data-default="${band.ratio}" id="pwMbRatio${i}"><div class="knob small"></div></div><div class="knob-value">${band.ratio}:1</div><div class="knob-label">Ratio</div></div>
+        <div class="knob-container"><div class="knob-wrapper" data-param="pwMbGain${i}" data-min="-12" data-max="12" data-default="${band.gain}" id="pwMbGain${i}"><div class="knob small"></div></div><div class="knob-value">${band.gain}dB</div><div class="knob-label">Gain</div></div>
+        <button class="toggle-btn ${band.enabled?'':'active'}" data-pwmb="${i}" data-pwmbe="enabled">${band.enabled?'ON':'OFF'}</button>
+      </div></div>`;
+    });
+    html += '</div>';
     container.innerHTML = html;
-    const pm = { 'c3_freq': 'freq', 'c3_thr': 'threshold', 'c3_rat': 'ratio', 'c3_atk': 'attack', 'c3_rel': 'release', 'c3_gn': 'gain' };
-    this.params.comp3.forEach((band, i) => { Object.entries(pm).forEach(([prefix, param]) => { this.bindKnobGroup(`${prefix}_${i}`, param, band[param], (v) => { this.params.comp3[i][param] = v; this.sendComp3(i, { [param]: v }); }); }); });
-    container.querySelectorAll('[data-c3tgl]').forEach(btn => { btn.addEventListener('click', () => { const idx = parseInt(btn.dataset.c3band); this.params.comp3[idx].enabled = !this.params.comp3[idx].enabled; btn.textContent = this.params.comp3[idx].enabled ? 'ON' : 'OFF'; btn.classList.toggle('active'); this.sendComp3(idx, { enabled: this.params.comp3[idx].enabled }); }); });
+    
+    // Bind multiband knobs
+    this.params.pw.multiband.forEach((band, i) => {
+      ['Thresh','Ratio','Gain'].forEach(k => {
+        this.bindKnobGroup(`pwMb${k}${i}`, k.toLowerCase(), band[k.toLowerCase() === 'thresh' ? 'threshold' : k.toLowerCase() === 'ratio' ? 'ratio' : 'gain'], (v) => {
+          const key = k.toLowerCase() === 'thresh' ? 'threshold' : k.toLowerCase() === 'ratio' ? 'ratio' : 'gain';
+          this.params.pw.multiband[i][key] = v;
+          this.sendMultiband(i, { [key]: v });
+        });
+      });
+    });
+    
+    container.querySelectorAll('[data-pwmbe]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.pwmb);
+        this.params.pw.multiband[idx].enabled = !this.params.pw.multiband[idx].enabled;
+        btn.textContent = this.params.pw.multiband[idx].enabled ? 'ON' : 'OFF';
+        btn.classList.toggle('active');
+        this.sendMultiband(idx, { enabled: this.params.pw.multiband[idx].enabled });
+      });
+    });
   }
 
   initFinalLimiterKnobs() {
@@ -461,17 +733,6 @@ class BroadcastProcessor {
     this.bindKnobGroup('fl_atk', 'attack', fl.attack, (v) => { this.params.finalLimiter.attack = v; this.sendFinalLimiter({ attack: v }); });
     this.bindKnobGroup('fl_rel', 'release', fl.release, (v) => { this.params.finalLimiter.release = v; this.sendFinalLimiter({ release: v }); });
     this.bindKnobGroup('fl_gn', 'gain', fl.gain, (v) => { this.params.finalLimiter.gain = v; this.sendFinalLimiter({ gain: v }); });
-  }
-
-  initPowerLimiterKnobs() {
-    const container = document.getElementById('powerLimiterKnobs'); if (!container) return;
-    const pl = this.params.powerLimiter;
-    container.innerHTML = `<div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="pl_thr" data-min="-20" data-max="0" data-default="${pl.threshold}" id="pl_thr"><div class="knob small"></div></div><div class="knob-value">${pl.threshold} dB</div><div class="knob-label">Threshold</div></div><div class="knob-container"><div class="knob-wrapper" data-param="pl_rat" data-min="5" data-max="100" data-default="${pl.ratio}" id="pl_rat"><div class="knob small"></div></div><div class="knob-value">${pl.ratio}:1</div><div class="knob-label">Ratio</div></div><div class="knob-container"><div class="knob-wrapper" data-param="pl_atk" data-min="0.01" data-max="5" data-default="${pl.attack}" id="pl_atk"><div class="knob small"></div></div><div class="knob-value">${pl.attack} ms</div><div class="knob-label">Attack</div></div><div class="knob-container"><div class="knob-wrapper" data-param="pl_rel" data-min="5" data-max="100" data-default="${pl.release}" id="pl_rel"><div class="knob small"></div></div><div class="knob-value">${pl.release} ms</div><div class="knob-label">Release</div></div><div class="knob-container"><div class="knob-wrapper" data-param="pl_gn" data-min="-12" data-max="12" data-default="${pl.gain}" id="pl_gn"><div class="knob small"></div></div><div class="knob-value">${pl.gain} dB</div><div class="knob-label">Gain</div></div></div>`;
-    this.bindKnobGroup('pl_thr', 'threshold', pl.threshold, (v) => { this.params.powerLimiter.threshold = v; this.sendPowerLimiter({ threshold: v }); });
-    this.bindKnobGroup('pl_rat', 'ratio', pl.ratio, (v) => { this.params.powerLimiter.ratio = v; this.sendPowerLimiter({ ratio: v }); });
-    this.bindKnobGroup('pl_atk', 'attack', pl.attack, (v) => { this.params.powerLimiter.attack = v; this.sendPowerLimiter({ attack: v }); });
-    this.bindKnobGroup('pl_rel', 'release', pl.release, (v) => { this.params.powerLimiter.release = v; this.sendPowerLimiter({ release: v }); });
-    this.bindKnobGroup('pl_gn', 'gain', pl.gain, (v) => { this.params.powerLimiter.gain = v; this.sendPowerLimiter({ gain: v }); });
   }
 
   bindKnobGroup(id, param, defaultVal, onChange) {
@@ -500,26 +761,30 @@ class BroadcastProcessor {
   }
 
   presets = {
-    bypass: { name: 'Bypass', geq: new Float32Array(31), comp3: [{ freq: 200, threshold: -30, ratio: 2, attack: 20, release: 100, gain: 0 }, { freq: 2000, threshold: -28, ratio: 2, attack: 15, release: 80, gain: 0 }, { freq: 8000, threshold: -26, ratio: 1.5, attack: 10, release: 60, gain: 0 }], finalLimiter: { threshold: -3, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -1, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 0, outputGain: 0 },
-    'fm-hot': { name: 'FM Hot', geq: [0, 0.5, 1, 1.5, 2, 1.5, 1, 0.5, 0, -0.5, 0, 0.5, 1, 1, 0.5, 0, 0, 0.5, 1, 1.5, 2, 2.5, 2, 1.5, 1, 0.5, 0.5, 1, 1.5, 2, 2.5], comp3: [{ freq: 200, threshold: -20, ratio: 4, attack: 15, release: 80, gain: 1 }, { freq: 2000, threshold: -18, ratio: 3.5, attack: 10, release: 60, gain: 1.5 }, { freq: 8000, threshold: -15, ratio: 3, attack: 5, release: 40, gain: 1 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 3, outputGain: 0 },
-    'fm-clean': { name: 'FM Clean', geq: new Float32Array(31).fill(0), comp3: [{ freq: 200, threshold: -22, ratio: 3, attack: 20, release: 100, gain: 0.5 }, { freq: 2000, threshold: -20, ratio: 3, attack: 15, release: 80, gain: 0.5 }, { freq: 8000, threshold: -18, ratio: 2.5, attack: 10, release: 60, gain: 0.5 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 0, outputGain: 0 },
-    streaming: { name: 'Streaming', geq: [0, 0, 0.5, 1, 1, 0.5, 0, 0, 0, -0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 0, 0.5, 1, 1, 1, 0.5, 0.5, 0.5, 0, 0, 0.5, 1, 1, 1.5], comp3: [{ freq: 200, threshold: -20, ratio: 3.5, attack: 15, release: 80, gain: 1 }, { freq: 2000, threshold: -18, ratio: 3, attack: 10, release: 60, gain: 1 }, { freq: 8000, threshold: -16, ratio: 2.5, attack: 5, release: 40, gain: 0.5 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 2, outputGain: 0 },
-    podcast: { name: 'Podcast', geq: [0, 0, 0, 0, -1, -2, -2, -1, 0, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], comp3: [{ freq: 200, threshold: -22, ratio: 4, attack: 10, release: 60, gain: 0 }, { freq: 2000, threshold: -20, ratio: 5, attack: 5, release: 40, gain: 2 }, { freq: 8000, threshold: -18, ratio: 3, attack: 5, release: 40, gain: 1 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 5, outputGain: 0 },
-    voice: { name: 'Voice', geq: [0, 0, 0, -1, -2, -3, -3, -2, -1, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], comp3: [{ freq: 200, threshold: -22, ratio: 4, attack: 10, release: 60, gain: -1 }, { freq: 2000, threshold: -18, ratio: 6, attack: 3, release: 30, gain: 3 }, { freq: 8000, threshold: -16, ratio: 3, attack: 5, release: 40, gain: 1 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 6, outputGain: 0 },
-    music: { name: 'Music', geq: [1, 1, 1.5, 2, 2, 1.5, 1, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 1, 1.5, 2, 2, 2, 1.5, 1, 1, 1, 1, 1.5], comp3: [{ freq: 200, threshold: -22, ratio: 2.5, attack: 20, release: 100, gain: 0.5 }, { freq: 2000, threshold: -20, ratio: 2.5, attack: 15, release: 80, gain: 0.5 }, { freq: 8000, threshold: -18, ratio: 2, attack: 10, release: 60, gain: 0.5 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 0, outputGain: 0 },
-    rock: { name: 'Rock', geq: [3, 3, 3.5, 4, 4, 3.5, 3, 2, 1, 0, -1, -1, 0, 1, 1, 0, 0, 0, 0.5, 1, 1.5, 2, 2.5, 2.5, 2.5, 2, 2, 2.5, 3, 3.5, 4], comp3: [{ freq: 200, threshold: -18, ratio: 5, attack: 10, release: 60, gain: 2 }, { freq: 2000, threshold: -16, ratio: 4, attack: 5, release: 40, gain: 2 }, { freq: 8000, threshold: -14, ratio: 3, attack: 5, release: 40, gain: 2 }], finalLimiter: { threshold: -0.5, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.3, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 3, outputGain: 2 },
-    classical: { name: 'Classical', geq: new Float32Array(31).fill(0), comp3: [{ freq: 200, threshold: -30, ratio: 1.5, attack: 30, release: 150, gain: 0 }, { freq: 2000, threshold: -28, ratio: 1.5, attack: 20, release: 120, gain: 0 }, { freq: 8000, threshold: -26, ratio: 1.2, attack: 15, release: 100, gain: 0 }], finalLimiter: { threshold: -3, ratio: 10, attack: 1, release: 100, gain: 0 }, powerLimiter: { threshold: -2, ratio: 20, attack: 0.5, release: 50, gain: 0 }, inputGain: 0, outputGain: 0 },
-    'bass-boost': { name: 'Bass Boost', geq: [6, 6, 6, 5.5, 5, 4.5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], comp3: [{ freq: 200, threshold: -18, ratio: 4, attack: 15, release: 80, gain: 2 }, { freq: 2000, threshold: -16, ratio: 3, attack: 10, release: 60, gain: 0 }, { freq: 8000, threshold: -14, ratio: 2.5, attack: 5, release: 40, gain: 0 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 0, outputGain: 0 },
-    bright: { name: 'Bright', geq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 4.5, 5, 5], comp3: [{ freq: 200, threshold: -20, ratio: 2.5, attack: 15, release: 80, gain: -0.5 }, { freq: 2000, threshold: -18, ratio: 3, attack: 10, release: 60, gain: 1 }, { freq: 8000, threshold: -16, ratio: 3, attack: 5, release: 40, gain: 2 }], finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0 }, powerLimiter: { threshold: -0.5, ratio: 30, attack: 0.1, release: 20, gain: 0 }, inputGain: 0, outputGain: 0 }
+    bypass: { name:'Bypass', geq:new Float32Array(31), comp:{input:0,threshold:-30,ratio:2,attack:20,release:100,knee:6,makeup:0,output:0}, pw:{input:0,output:0,agcThresh:-30,agcRatio:2,compThresh:-20,compRatio:2,limiterThresh:-6,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:0,exciteFreq:5000,exciteAmt:0,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-30,ratio:2,attack:20,release:100,gain:0,enabled:true},{freq:250,threshold:-28,ratio:2,attack:15,release:80,gain:0,enabled:true},{freq:2500,threshold:-26,ratio:2,attack:10,release:60,gain:0,enabled:true},{freq:8000,threshold:-24,ratio:1.5,attack:8,release:50,gain:0,enabled:true}]}, finalLimiter:{threshold:-3,ratio:20,attack:0.5,release:50,gain:0}, inputGain:0, outputGain:0 },
+    'fm-hot': { name:'FM Hot', geq:[0,0.5,1,1.5,2,1.5,1,0.5,0,-0.5,0,0.5,1,1,0.5,0,0,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5,1,1.5,2,2.5], comp:{input:0,threshold:-20,ratio:4,attack:10,release:60,knee:6,makeup:3,output:0}, pw:{input:0,output:0,agcThresh:-24,agcRatio:3,compThresh:-12,compRatio:4,limiterThresh:-3,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:3,exciteFreq:5000,exciteAmt:2,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-18,ratio:3,attack:15,release:80,gain:2,enabled:true},{freq:250,threshold:-16,ratio:3,attack:10,release:60,gain:1,enabled:true},{freq:2500,threshold:-14,ratio:2.5,attack:8,release:50,gain:1,enabled:true},{freq:8000,threshold:-12,ratio:2,attack:5,release:40,gain:0.5,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:3, outputGain:0 },
+    podcast: { name:'Podcast', geq:[0,0,0,0,-1,-2,-2,-1,0,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], comp:{input:0,threshold:-18,ratio:5,attack:5,release:40,knee:3,makeup:4,output:0}, pw:{input:0,output:0,agcThresh:-18,agcRatio:5,compThresh:-10,compRatio:5,limiterThresh:-3,limiterRatio:20,scHPF:150,scMix:80,bassFreq:80,bassAmt:2,exciteFreq:5000,exciteAmt:3,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-22,ratio:4,attack:10,release:60,gain:0,enabled:true},{freq:250,threshold:-20,ratio:3,attack:8,release:50,gain:0,enabled:true},{freq:2500,threshold:-18,ratio:4,attack:5,release:40,gain:2,enabled:true},{freq:8000,threshold:-16,ratio:2.5,attack:5,release:40,gain:1,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:5, outputGain:0 },
+    music: { name:'Music', geq:[1,1,1.5,2,2,1.5,1,0.5,0,0,0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2,2,1.5,1,1,1,1,1.5], comp:{input:0,threshold:-24,ratio:2.5,attack:20,release:120,knee:12,makeup:1,output:0}, pw:{input:0,output:0,agcThresh:-24,agcRatio:2.5,compThresh:-16,compRatio:2.5,limiterThresh:-3,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:2,exciteFreq:5000,exciteAmt:1,clipMode:0,clipThresh:-0.5,multiband:[{freq:60,threshold:-20,ratio:2.5,attack:20,release:100,gain:1,enabled:true},{freq:250,threshold:-18,ratio:2,attack:15,release:80,gain:0.5,enabled:true},{freq:2500,threshold:-16,ratio:2.5,attack:10,release:60,gain:1,enabled:true},{freq:8000,threshold:-14,ratio:2,attack:8,release:50,gain:0.5,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:0, outputGain:0 },
+    rock: { name:'Rock', geq:[3,3,3.5,4,4,3.5,3,2,1,0,-1,-1,0,1,1,0,0,0,0.5,1,1.5,2,2.5,2.5,2.5,2,2,2.5,3,3.5,4], comp:{input:0,threshold:-22,ratio:4,attack:5,release:50,knee:0,makeup:5,output:0}, pw:{input:0,output:2,agcThresh:-22,agcRatio:4,compThresh:-10,compRatio:4,limiterThresh:-2,limiterRatio:20,scHPF:80,scMix:60,bassFreq:80,bassAmt:4,exciteFreq:5000,exciteAmt:3,clipMode:1,clipThresh:-0.3,multiband:[{freq:60,threshold:-16,ratio:5,attack:10,release:60,gain:3,enabled:true},{freq:250,threshold:-14,ratio:3,attack:8,release:50,gain:1,enabled:true},{freq:2500,threshold:-12,ratio:4,attack:5,release:40,gain:2,enabled:true},{freq:8000,threshold:-10,ratio:2.5,attack:5,release:40,gain:2,enabled:true}]}, finalLimiter:{threshold:-0.5,ratio:20,attack:0.5,release:50,gain:0}, inputGain:3, outputGain:2 },
+    voice: { name:'Voice', geq:[0,0,0,-1,-2,-3,-3,-2,-1,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], comp:{input:0,threshold:-16,ratio:6,attack:3,release:30,knee:0,makeup:5,output:0}, pw:{input:0,output:0,agcThresh:-16,agcRatio:6,compThresh:-10,compRatio:6,limiterThresh:-3,limiterRatio:20,scHPF:150,scMix:90,bassFreq:80,bassAmt:1,exciteFreq:5000,exciteAmt:3,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-24,ratio:4,attack:10,release:60,gain:-2,enabled:true},{freq:250,threshold:-20,ratio:3,attack:8,release:50,gain:0,enabled:true},{freq:2500,threshold:-16,ratio:5,attack:3,release:30,gain:3,enabled:true},{freq:8000,threshold:-14,ratio:2.5,attack:5,release:40,gain:1,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:6, outputGain:0 },
+    'fm-clean': { name:'FM Clean', geq:new Float32Array(31).fill(0), comp:{input:0,threshold:-22,ratio:3,attack:15,release:80,knee:8,makeup:2,output:0}, pw:{input:0,output:0,agcThresh:-22,agcRatio:3,compThresh:-14,compRatio:3,limiterThresh:-3,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:1,exciteFreq:5000,exciteAmt:1,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-20,ratio:3,attack:20,release:100,gain:1,enabled:true},{freq:250,threshold:-18,ratio:2.5,attack:15,release:80,gain:0.5,enabled:true},{freq:2500,threshold:-16,ratio:2.5,attack:10,release:60,gain:1,enabled:true},{freq:8000,threshold:-14,ratio:2,attack:8,release:50,gain:0.5,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:0, outputGain:0 },
+    streaming: { name:'Streaming', geq:[0,0,0.5,1,1,0.5,0,0,0,-0.5,0,0,0.5,0.5,0,0,0,0,0.5,1,1,1,0.5,0.5,0.5,0,0,0.5,1,1,1.5], comp:{input:0,threshold:-20,ratio:3.5,attack:12,release:80,knee:6,makeup:2,output:0}, pw:{input:0,output:0,agcThresh:-20,agcRatio:3,compThresh:-12,compRatio:3.5,limiterThresh:-3,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:2,exciteFreq:5000,exciteAmt:1,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-18,ratio:3.5,attack:15,release:80,gain:1.5,enabled:true},{freq:250,threshold:-16,ratio:3,attack:10,release:60,gain:1,enabled:true},{freq:2500,threshold:-14,ratio:3,attack:8,release:50,gain:1.5,enabled:true},{freq:8000,threshold:-12,ratio:2.5,attack:5,release:40,gain:0.5,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:2, outputGain:0 },
+    classical: { name:'Classical', geq:new Float32Array(31).fill(0), comp:{input:0,threshold:-30,ratio:1.5,attack:100,release:500,knee:24,makeup:0,output:0}, pw:{input:0,output:0,agcThresh:-30,agcRatio:1.5,compThresh:-20,compRatio:1.5,limiterThresh:-6,limiterRatio:10,scHPF:100,scMix:50,bassFreq:80,bassAmt:0,exciteFreq:5000,exciteAmt:0,clipMode:0,clipThresh:-0.5,multiband:[{freq:60,threshold:-30,ratio:1.5,attack:30,release:150,gain:0,enabled:true},{freq:250,threshold:-28,ratio:1.5,attack:20,release:120,gain:0,enabled:true},{freq:2500,threshold:-26,ratio:1.5,attack:15,release:100,gain:0,enabled:true},{freq:8000,threshold:-24,ratio:1.2,attack:10,release:80,gain:0,enabled:true}]}, finalLimiter:{threshold:-3,ratio:10,attack:1,release:100,gain:0}, inputGain:0, outputGain:0 },
+    'bass-boost': { name:'Bass Boost', geq:[6,6,6,5.5,5,4.5,4,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], comp:{input:0,threshold:-20,ratio:4,attack:10,release:60,knee:6,makeup:2,output:0}, pw:{input:0,output:0,agcThresh:-20,agcRatio:3,compThresh:-12,compRatio:4,limiterThresh:-3,limiterRatio:20,scHPF:80,scMix:60,bassFreq:60,bassAmt:6,exciteFreq:5000,exciteAmt:1,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-16,ratio:4,attack:15,release:80,gain:4,enabled:true},{freq:250,threshold:-14,ratio:3,attack:10,release:60,gain:1,enabled:true},{freq:2500,threshold:-12,ratio:2.5,attack:8,release:50,gain:0,enabled:true},{freq:8000,threshold:-10,ratio:2,attack:5,release:40,gain:0,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:0, outputGain:0 },
+    bright: { name:'Bright', geq:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4.5,5,5], comp:{input:0,threshold:-22,ratio:3,attack:10,release:60,knee:6,makeup:1.5,output:0}, pw:{input:0,output:0,agcThresh:-22,agcRatio:3,compThresh:-12,compRatio:3,limiterThresh:-3,limiterRatio:20,scHPF:100,scMix:50,bassFreq:80,bassAmt:1,exciteFreq:6000,exciteAmt:4,clipMode:1,clipThresh:-0.5,multiband:[{freq:60,threshold:-20,ratio:2.5,attack:15,release:80,gain:-1,enabled:true},{freq:250,threshold:-18,ratio:2.5,attack:10,release:60,gain:0,enabled:true},{freq:2500,threshold:-16,ratio:3,attack:8,release:50,gain:2,enabled:true},{freq:8000,threshold:-14,ratio:2.5,attack:5,release:40,gain:3,enabled:true}]}, finalLimiter:{threshold:-1,ratio:20,attack:0.5,release:50,gain:0}, inputGain:0, outputGain:0 }
   };
 
   loadPreset(name) {
     const preset = this.presets[name]; if (!preset) return;
     if (preset.geq && preset.geq.length === 31) { for (let i = 0; i < 31; i++) { const val = typeof preset.geq[i] === 'number' ? preset.geq[i] : 0; this.params.geq[i] = val; this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: val }); this.updateGEQValue(i); } }
     else { this.params.geq.fill(0); for (let i = 0; i < 31; i++) { this.audioWorklet?.port.postMessage({ type: 'geq', index: i, value: 0 }); this.updateGEQValue(i); } }
-    preset.comp3.forEach((band, i) => { if (this.params.comp3[i]) { this.params.comp3[i] = { ...this.params.comp3[i], ...band }; this.sendComp3(i, band); } });
+    if (preset.comp) { Object.assign(this.params.comp, preset.comp); ['input','threshold','ratio','attack','release','knee','makeup','output'].forEach(k => this.sendComp(k, this.params.comp[k])); }
+    if (preset.pw) {
+      const pw = preset.pw;
+      ['input','output','agcThresh','agcRatio','compThresh','compRatio','limiterThresh','limiterRatio','scHPF','scMix','bassFreq','bassAmt','exciteFreq','exciteAmt','clipMode','clipThresh'].forEach(k => { if(pw[k]!==undefined) this.sendPw('pw'+k.charAt(0).toUpperCase()+k.slice(1), pw[k]); });
+      if(pw.multiband) pw.multiband.forEach((band,i)=>{if(this.params.pw.multiband[i]){this.params.pw.multiband[i]={...this.params.pw.multiband[i],...band};this.sendMultiband(i,band);}});
+    }
     this.params.finalLimiter = { ...this.params.finalLimiter, ...preset.finalLimiter }; this.sendFinalLimiter(preset.finalLimiter);
-    this.params.powerLimiter = { ...this.params.powerLimiter, ...preset.powerLimiter }; this.sendPowerLimiter(preset.powerLimiter);
     if (preset.inputGain !== undefined) { this.sendParam('inputGain', preset.inputGain); this.params.inputGain = preset.inputGain; }
     if (preset.outputGain !== undefined) { this.sendParam('outputGain', preset.outputGain); this.params.outputGain = preset.outputGain; }
     this.drawEQCurve(); console.log(`Preset "${name}" loaded`);
