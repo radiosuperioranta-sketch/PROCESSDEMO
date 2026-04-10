@@ -43,8 +43,6 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
 .meter-fill { position: absolute; bottom: 0; left: 0; right: 0; height: 0%; background: linear-gradient(0deg, var(--accent-green) 0%, var(--accent-green) 60%, #ffcc00 80%, #ff0000 100%); transition: height 0.05s; border-radius: 0 0 3px 3px; }
 .meter-peak { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: #fff; transition: bottom 0.02s; }
 .meter-label { text-align: center; font-size: 9px; color: var(--text-secondary); margin-top: 4px; letter-spacing: 1px; }
-.spectrum-panel { grid-column: 1 / -1; }
-.spectrum-canvas { width: 100%; height: 100px; background: #050505; border-radius: 4px; border: 1px solid #222; }
 .dsp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
 .dsp-panel { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; position: relative; }
 .dsp-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(57,255,20,0.2), transparent); }
@@ -91,9 +89,7 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
 .status-bar .indicator.red { background: #ff0000; }
 .geq-container { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid #222; }
 .geq-faders { display: flex; align-items: flex-end; justify-content: center; gap: 2px; padding: 4px 0; width: 100%; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #444 #111; }
-.geq-faders::-webkit-scrollbar { height: 4px; }
-.geq-faders::-webkit-scrollbar-track { background: #111; border-radius: 2px; }
-.geq-faders::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+.geq-faders::-webkit-scrollbar { height: 4px; } .geq-faders::-webkit-scrollbar-track { background: #111; border-radius: 2px; } .geq-faders::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
 .geq-channel { display: flex; flex-direction: column; align-items: center; min-width: 30px; flex-shrink: 0; }
 .geq-value { font-size: 8px; color: var(--accent-green); font-family: 'Courier New', monospace; font-weight: bold; height: 12px; margin-bottom: 2px; text-align: center; white-space: nowrap; }
 .geq-fader-track { position: relative; width: 16px; height: var(--fader-height); background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%); border-radius: 8px; border: 1px solid #333; cursor: pointer; touch-action: none; }
@@ -146,7 +142,6 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
     <div class="panel"><div class="panel-title">📊 Level Meters</div><div style="display:flex; gap:15px; justify-content:center;"><div><div class="meter-container"><div class="meter"><div class="meter-fill" id="inputMeterL"></div><div class="meter-peak" id="inputPeakL"></div></div><div class="meter"><div class="meter-fill" id="inputMeterR"></div><div class="meter-peak" id="inputPeakR"></div></div></div><div class="meter-label">INPUT</div></div><div><div class="meter-container"><div class="meter"><div class="meter-fill" id="procMeterL"></div><div class="meter-peak" id="procPeakL"></div></div><div class="meter"><div class="meter-fill" id="procMeterR"></div><div class="meter-peak" id="procPeakR"></div></div></div><div class="meter-label">PROCESSED</div></div><div><div class="meter-container"><div class="meter"><div class="meter-fill" id="outputMeterL"></div><div class="meter-peak" id="outputPeakL"></div></div><div class="meter"><div class="meter-fill" id="outputMeterR"></div><div class="meter-peak" id="outputPeakR"></div></div></div><div class="meter-label">OUTPUT</div></div></div></div>
     <div class="panel"><div class="panel-title">📤 Output</div><div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="outputGain" data-min="-24" data-max="12" data-default="0"><div class="knob"></div></div><div class="knob-value">0.0 dB</div><div class="knob-label">Gain</div></div><div class="knob-container"><div class="knob-wrapper" data-param="outputLimit" data-min="0" data-max="100" data-default="100"><div class="knob"></div></div><div class="knob-value">100%</div><div class="knob-label">Limit</div></div><div class="knob-container"><div class="knob-wrapper" data-param="stereoMode" data-min="0" data-max="2" data-default="0"><div class="knob small"></div></div><div class="knob-value">ST</div><div class="knob-label">Stereo</div></div></div></div>
   </div>
-  <div class="panel spectrum-panel"><div class="panel-title">📈 Spectrum Analyzer</div><canvas class="spectrum-canvas" id="spectrumCanvas"></canvas></div>
 
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 31 Bandas<button class="bypass-btn active" data-module="geq">ACTIVE</button><button class="geq-reset-btn" id="geqResetBtn">↺ Reset</button></div><canvas class="eq-display" id="eqCanvas"></canvas><div class="geq-container"><div class="geq-faders" id="geqFaders"></div></div></div>
 
@@ -166,7 +161,6 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
     </div><div class="knobs-grid" id="dynamicEQKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="dynEqGrMeter"></div></div>
   </div>
 
-  <!-- ECUALIZADOR GRÁFICO 16 BANDAS -->
   <div class="dsp-panel">
     <div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Gráfico 16 Bandas<button class="bypass-btn active" data-module="geq16">ACTIVE</button><button class="geq-reset-btn" id="geq16ResetBtn">↺ Reset</button></div>
     <div class="comp-io-meters">
@@ -198,12 +192,11 @@ class BroadcastProcessor {
     this.compMeters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
     this.dynEqMeters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
     this.geq16Meters = { inL: 0, inR: 0, outL: 0, outR: 0, inPeakL: 0, inPeakR: 0, outPeakL: 0, outPeakR: 0, gr: 0 };
-    this.spectrumData = new Float32Array(128); this.eqData = new Float32Array(128);
+    this.eqData = new Float32Array(128);
     this.clipped = false; this.cpuLoad = 0; this.lastFrameTime = performance.now(); this.frameCount = 0;
     this.geqFrequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
-    // Frecuencias del GEQ 16 bandas - ISO broadcast
-    this.geq16Frequencies = [31.5, 63, 125, 250, 500, 1000, 1500, 2000, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000];
-    this.initDefaultParams(); this.initUI(); this.initBypassButtons(); this.initKnobs(); this.initGEQFaders(); this.initGEQ16Faders(); this.initSpectrum(); this.initEQDisplay(); this.loadPreset('fm-hot');
+    this.geq16Frequencies = [31.5,63,125,250,500,1000,1500,2000,3150,4000,5000,6300,8000,10000,12500,16000];
+    this.initDefaultParams(); this.initUI(); this.initBypassButtons(); this.initKnobs(); this.initGEQFaders(); this.initGEQ16Faders(); this.initEQDisplay(); this.loadPreset('fm-hot');
   }
 
   initDefaultParams() {
@@ -214,7 +207,6 @@ class BroadcastProcessor {
     this.params.finalLimiter = { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true };
     this.params.dynamicEQ = { threshold: -20, ratio: 2, attack: 10, release: 100, gain: 0, enabled: true };
     this.params.dynamicEQMaster = { enabled: true };
-    // GEQ 16 bandas
     this.params.geq16 = new Float32Array(16); this.params.geq16Master = { enabled: true };
     this.params.outputGain = 0; this.params.outputLimit = 100; this.params.stereoMode = 0;
     this.params.stereoWidth = 100; this.params.stereoBalance = 0;
@@ -238,7 +230,6 @@ class BroadcastProcessor {
         if (e.data.type === 'compMeters') { this.compMeters = e.data.compMeters; this.updateCompMeters(); }
         if (e.data.type === 'dynEqMeters') { this.dynEqMeters = e.data.dynEqMeters; this.updateDynEqMeters(); }
         if (e.data.type === 'geq16Meters') { this.geq16Meters = e.data.geq16Meters; this.updateGeq16Meters(); }
-        if (e.data.type === 'spectrum') { this.spectrumData = new Float32Array(e.data.spectrum); this.drawSpectrum(); }
         if (e.data.type === 'eqcurve') { this.eqData = new Float32Array(e.data.eqcurve); this.drawEQCurve(); }
         if (e.data.type === 'gr') this.updateGRMeters(e.data.gr);
         if (e.data.type === 'clip') { this.clipped = true; setTimeout(() => this.clipped = false, 200); const ci = document.getElementById('clipIndicator'); ci.style.background = '#ff0000'; ci.style.boxShadow = '0 0 6px rgba(255,0,0,0.8)'; }
@@ -273,7 +264,7 @@ class BroadcastProcessor {
         this.compInL=0;this.compInR=0;this.compOutL=0;this.compOutR=0;this.compPeakIL=0;this.compPeakIR=0;this.compPeakOL=0;this.compPeakOR=0;this.compGR=0;
         this.dynEqInL=0;this.dynEqInR=0;this.dynEqOutL=0;this.dynEqOutR=0;this.dynEqPeakIL=0;this.dynEqPeakIR=0;this.dynEqPeakOL=0;this.dynEqPeakOR=0;this.dynEqGR=0;
         this.geq16InL=0;this.geq16InR=0;this.geq16OutL=0;this.geq16OutR=0;this.geq16PeakIL=0;this.geq16PeakIR=0;this.geq16PeakOL=0;this.geq16PeakOR=0;this.geq16GR=0;
-        this.spectrumBuffer = new Float32Array(256); this.spectrumIdx = 0; this.saturationAmount = 0.1; this.antiClipEnabled = true;
+        this.saturationAmount = 0.1; this.antiClipEnabled = true;
         this.meterUpdateInterval = Math.floor(this.sampleRate / 30); this.frameCounter = 0;
         this.port.onmessage = (e) => this.handleMessage(e.data);
       }
@@ -310,15 +301,12 @@ class BroadcastProcessor {
       if(this.stereoBalance!==0){if(this.stereoBalance>0)sR*=(1-this.stereoBalance);else sL*=(1+this.stereoBalance);}
       sL*=this.outputGain*this.outputLimit;sR*=this.outputGain*this.outputLimit;sL=Math.max(-1,Math.min(1,sL));sR=Math.max(-1,Math.min(1,sR));
       peakOL=Math.max(peakOL,Math.abs(sL));peakOR=Math.max(peakOR,Math.abs(sR));rmsOL+=sL*sL;rmsOR+=sR*sR;
-      if(this.spectrumIdx<this.spectrumBuffer.length){this.spectrumBuffer[this.spectrumIdx]=sL;this.spectrumIdx++;}
       outL[i]=sL;outR[i]=sR;}
-      
       this.frameCounter+=blockSize;if(this.frameCounter>=this.meterUpdateInterval){this.frameCounter=0;const rmsToDb=(rms,n)=>20*Math.log10(Math.max(Math.sqrt(rms/n),1e-10));this.meterInputL=rmsToDb(rmsIL,blockSize);this.meterInputR=rmsToDb(rmsIR,blockSize);this.meterOutputL=rmsToDb(rmsOL,blockSize);this.meterOutputR=rmsToDb(rmsOR,blockSize);this.meterPeakIL=20*Math.log10(Math.max(peakIL,1e-10));this.meterPeakIR=20*Math.log10(Math.max(peakIR,1e-10));this.meterPeakOL=20*Math.log10(Math.max(peakOL,1e-10));this.meterPeakOR=20*Math.log10(Math.max(peakOR,1e-10));this.port.postMessage({type:'meters',meters:{inputL:this.meterInputL,inputR:this.meterInputR,outputL:this.meterOutputL,outputR:this.meterOutputR},peaks:{inputL:this.meterPeakIL,inputR:this.meterPeakIR,outputL:this.meterPeakOL,outputR:this.meterPeakOR}});
       const compInL=rmsToDb(compRmsIL,blockSize),compInR=rmsToDb(compRmsIR,blockSize);const compOutL=rmsToDb(compRmsOL,blockSize),compOutR=rmsToDb(compRmsOR,blockSize);this.port.postMessage({type:'compMeters',compMeters:{inL:compInL,inR:compInR,outL:compOutL,outR:compOutR,inPeakL:20*Math.log10(Math.max(compPeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(compPeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(compPeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(compPeakOR,1e-10)),gr:this.compGR}});
       const deInL=rmsToDb(dynEqRmsIL,blockSize),deInR=rmsToDb(dynEqRmsIR,blockSize);const deOutL=rmsToDb(dynEqRmsOL,blockSize),deOutR=rmsToDb(dynEqRmsOR,blockSize);this.port.postMessage({type:'dynEqMeters',dynEqMeters:{inL:deInL,inR:deInR,outL:deOutL,outR:deOutR,inPeakL:20*Math.log10(Math.max(dynEqPeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(dynEqPeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(dynEqPeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(dynEqPeakOR,1e-10)),gr:this.dynEqGR}});
       const geInL=rmsToDb(geq16RmsIL,blockSize),geInR=rmsToDb(geq16RmsIR,blockSize);const geOutL=rmsToDb(geq16RmsOL,blockSize),geOutR=rmsToDb(geq16RmsOR,blockSize);this.port.postMessage({type:'geq16Meters',geq16Meters:{inL:geInL,inR:geInR,outL:geOutL,outR:geOutR,inPeakL:20*Math.log10(Math.max(geq16PeakIL,1e-10)),inPeakR:20*Math.log10(Math.max(geq16PeakIR,1e-10)),outPeakL:20*Math.log10(Math.max(geq16PeakOL,1e-10)),outPeakR:20*Math.log10(Math.max(geq16PeakOR,1e-10)),gr:this.geq16GR}});
-      if(this.spectrumIdx>0){const spec=this.computeSpectrum(this.spectrumBuffer.slice(0,this.spectrumIdx));this.spectrumIdx=0;this.port.postMessage({type:'spectrum',spectrum:spec});}this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
-      computeSpectrum(buffer){const N=buffer.length,result=new Float32Array(128),bands=128;for(let b=0;b<bands;b++){const freq=20*Math.pow(1000,b/bands);const k=Math.round(freq*N/this.sampleRate);if(k<1||k>=N/2)continue;let re=0,im=0;const omega=2*Math.PI*k/N;for(let i=0;i<N;i++){re+=buffer[i]*Math.cos(omega*i);im-=buffer[i]*Math.sin(omega*i);}const energy=Math.sqrt(re*re+im*im)/N;result[b]=20*Math.log10(Math.max(energy,1e-10));}return result;}
+      this.port.postMessage({type:'eqcurve',eqcurve:this.computeEQCurve()});if(clipDetected)this.port.postMessage({type:'clip'});}return true;}
       computeEQCurve(){const points=128,curve=new Float32Array(points),sr=this.sampleRate;for(let i=0;i<points;i++){const freq=20*Math.pow(1000,i/points);let response=0;for(let j=0;j<31;j++){if(Math.abs(this.geqGains[j])<0.01)continue;const f=this.geqFilters[j];const omega=2*Math.PI*freq/sr;const cosW=Math.cos(omega),sinW=Math.sin(omega),cos2W=Math.cos(2*omega),sin2W=Math.sin(2*omega);const numRe=f.b0+f.b1*cosW+f.b2*cos2W,numIm=f.b1*sinW+f.b2*sin2W;const denRe=1+f.a1*cosW+f.a2*cos2W,denIm=f.a1*sinW+f.a2*sin2W;const mag=Math.sqrt((numRe*numRe+numIm*numIm)/(denRe*denRe+denIm*denIm));response+=20*Math.log10(Math.max(mag,1e-10));}curve[i]=response;}return curve;}
     }
     registerProcessor('broadcast-processor', BroadcastProcessor);`;
@@ -395,10 +383,6 @@ class BroadcastProcessor {
   }
 
   updateGRMeters(gr) {}
-
-  initSpectrum() { this.canvas = document.getElementById('spectrumCanvas'); this.ctx = this.canvas.getContext('2d'); this.resizeCanvas(); window.addEventListener('resize', () => this.resizeCanvas()); this.drawSpectrum(); }
-  resizeCanvas() { this.canvas.width = this.canvas.offsetWidth * 2; this.canvas.height = this.canvas.offsetHeight * 2; }
-  drawSpectrum() { const c = this.canvas, ctx = this.ctx, w = c.width, h = c.height; ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1; for (let i = 0; i <= 8; i++) { const y = (h / 8) * i; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); } ctx.fillStyle = '#444'; ctx.font = '16px Courier New'; ['20', '50', '100', '200', '500', '1k', '2k', '5k', '10k', '20k'].forEach((l, i) => { ctx.fillText(l, (w / 9) * i - 10, h - 5); }); if (!this.spectrumData || this.spectrumData.length === 0) return; const bw = w / this.spectrumData.length, minDb = -80, maxDb = 0; for (let i = 0; i < this.spectrumData.length; i++) { const db = Math.max(minDb, Math.min(maxDb, this.spectrumData[i])); const nh = (db - minDb) / (maxDb - minDb), bh = nh * h * 0.85; let r, g, b; if (nh < 0.5) { r = 0; g = Math.floor(nh * 2 * 255); b = 0; } else if (nh < 0.8) { r = Math.floor((nh - 0.5) * 2 * 255); g = 255; b = 0; } else { r = 255; g = Math.floor((1 - (nh - 0.8) * 5) * 255); b = 0; } ctx.fillStyle = `rgb(${r},${g},${b})`; ctx.fillRect(i * bw, h - bh, bw - 1, bh); } ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(57,255,20,0.3)'; ctx.strokeStyle = 'rgba(57,255,20,0.5)'; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i < this.spectrumData.length; i++) { const db = Math.max(minDb, Math.min(maxDb, this.spectrumData[i])); const nh = (db - minDb) / (maxDb - minDb); const bh = nh * h * 0.85; const x = i * bw + bw / 2, y = h - bh; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.shadowBlur = 0; }
 
   initEQDisplay() { this.eqCanvas = document.getElementById('eqCanvas'); this.eqCtx = this.eqCanvas.getContext('2d'); this.eqCanvas.width = this.eqCanvas.offsetWidth * 2; this.eqCanvas.height = this.eqCanvas.offsetHeight * 2; this.drawEQCurve(); }
   drawEQCurve() { const c = this.eqCanvas; if (!c) return; const ctx = this.eqCtx, w = c.width, h = c.height; ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1; for (let db = -12; db <= 12; db += 3) { const y = h / 2 - (db / 12) * (h / 2) * 0.8; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); } ctx.strokeStyle = '#333'; ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke(); ctx.fillStyle = '#555'; ctx.font = '14px Courier New'; for (let db = -12; db <= 12; db += 6) { const y = h / 2 - (db / 12) * (h / 2) * 0.8; ctx.fillText((db > 0 ? '+' : '') + db + 'dB', 5, y + 4); } ['20', '50', '100', '200', '500', '1k', '2k', '5k', '10k', '20k'].forEach((l, i) => { ctx.fillStyle = '#555'; ctx.fillText(l, (w / 9) * i - 12, h - 5); }); if (!this.eqData || this.eqData.length === 0) return; ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(57,255,20,0.5)'; ctx.strokeStyle = '#39ff14'; ctx.lineWidth = 3; ctx.beginPath(); for (let i = 0; i < this.eqData.length; i++) { const db = Math.max(-12, Math.min(12, this.eqData[i])); const x = (i / (this.eqData.length - 1)) * w; const y = h / 2 - (db / 12) * (h / 2) * 0.8; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.shadowBlur = 0; ctx.lineTo(w, h / 2); ctx.lineTo(0, h / 2); ctx.closePath(); ctx.fillStyle = 'rgba(57,255,20,0.05)'; ctx.fill(); }
