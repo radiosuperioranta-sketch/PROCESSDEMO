@@ -152,8 +152,6 @@ body { font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; background: var(-
     </div><div class="knobs-grid" id="compressorKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="compGrMeter"></div></div>
   </div>
 
-  <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Limiter Final<button class="bypass-btn active" data-module="finalLimiter">ACTIVE</button></div><div class="knobs-grid" id="finalLimiterKnobs"></div><div class="gr-meter"><div class="gr-meter-fill" id="limGrMeter"></div></div></div>
-
   <div class="dsp-panel"><div class="dsp-panel-title"><span class="status-dot"></span>Ecualizador Dinámico<button class="bypass-btn active" data-module="dynamicEQ">ACTIVE</button></div>
     <div class="comp-io-meters">
       <div class="io-meter"><div class="io-label">📥 Input R/L</div><div class="io-bar"><div class="mini-meter"><div class="mini-fill" id="dynEqInFillL"></div><div class="mini-peak" id="dynEqInPeakL"></div></div><div class="mini-meter"><div class="mini-fill" id="dynEqInFillR"></div><div class="mini-peak" id="dynEqInPeakR"></div></div></div><div class="io-level" id="dynEqInLevel">L: 0.0 dB | R: 0.0 dB</div></div>
@@ -204,7 +202,6 @@ class BroadcastProcessor {
     this.params.geq = new Float32Array(31); this.params.geqMaster = { enabled: true };
     this.params.compressor = { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, enabled: true };
     this.params.compressorMaster = { enabled: true };
-    this.params.finalLimiter = { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true };
     this.params.dynamicEQ = { threshold: -20, ratio: 2, attack: 10, release: 100, gain: 0, enabled: true };
     this.params.dynamicEQMaster = { enabled: true };
     this.params.geq16 = new Float32Array(16); this.params.geq16Master = { enabled: true };
@@ -251,14 +248,13 @@ class BroadcastProcessor {
     class BroadcastProcessor extends AudioWorkletProcessor {
       constructor(options) {
         super(); this.sampleRate = options.sampleRate || 48000;
-        this.geqMasterEnabled = true; this.compressorEnabled = true; this.finalLimiterEnabled = true; this.dynamicEQEnabled = true; this.geq16Enabled = true;
+        this.geqMasterEnabled = true; this.compressorEnabled = true; this.dynamicEQEnabled = true; this.geq16Enabled = true;
         this.inputGain = 1.0; this.inputPan = 0.0; this.outputGain = 1.0; this.stereoWidth = 1.0; this.stereoBalance = 0.0; this.stereoMode = 0;
         this.geqFrequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
         this.geqGains = new Float32Array(31); this.geqQ = 4.318; this.geqFilters = []; this.initGEQ();
         this.geq16Frequencies = [31.5,63,125,250,500,1000,1500,2000,3150,4000,5000,6300,8000,10000,12500,16000];
         this.geq16Gains = new Float32Array(16); this.geq16Q = 2.5; this.geq16Filters = []; this.initGEQ16();
         this.compressor = { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, envelope: 0, g: 1.0 };
-        this.finalLimiter = {threshold:-1,ratio:20,attack:0.5,release:50,gain:0,envelope:0,g:1.0};
         this.dynamicEQ = {threshold:-20,ratio:2,attack:10,release:100,gain:0,envelope:0,g:1.0};
         this.meterInputL = 0; this.meterInputR = 0; this.meterOutputL = 0; this.meterOutputR = 0; this.meterPeakIL = 0; this.meterPeakIR = 0; this.meterPeakOL = 0; this.meterPeakOR = 0;
         this.compInL=0;this.compInR=0;this.compOutL=0;this.compOutR=0;this.compPeakIL=0;this.compPeakIR=0;this.compPeakOL=0;this.compPeakOR=0;this.compGR=0;
@@ -274,7 +270,7 @@ class BroadcastProcessor {
       initGEQ16() { this.geq16Filters = []; for (let i = 0; i < 16; i++) { this.geq16Filters.push({ freq:this.geq16Frequencies[i], gain:0, q:this.geq16Q, b0:0,b1:0,b2:0,a1:0,a2:0, x1L:0,x2L:0,y1L:0,y2L:0, x1R:0,x2R:0,y1R:0,y2R:0 }); this.updateGEQ16Coeffs(i); } }
       updateGEQ16Coeffs(index) { const f=this.geq16Filters[index]; const sr=this.sampleRate; const freq=Math.max(20,Math.min(20000,f.freq)); const gain=this.geq16Gains[index]; const q=f.q; const A=Math.pow(10,gain/40); const omega=2*Math.PI*freq/sr; const sinW=Math.sin(omega); const cosW=Math.cos(omega); const alpha=sinW/(2*q); f.b0=(1+alpha*A)/(1+alpha/A); f.b1=-2*cosW/(1+alpha/A); f.b2=(1-alpha*A)/(1+alpha/A); f.a1=-2*cosW/(1+alpha/A); f.a2=(1-alpha/A)/(1+alpha/A); }
       processGEQ16(xL,xR){let yL=xL,yR=xR;for(let i=0;i<16;i++){const f=this.geq16Filters[i];if(Math.abs(this.geq16Gains[i])>0.01){const nL=f.b0*yL+f.b1*f.x1L+f.b2*f.x2L-f.a1*f.y1L-f.a2*f.y2L;const nR=f.b0*yR+f.b1*f.x1R+f.b2*f.x2R-f.a1*f.y1R-f.a2*f.y2R;f.x2L=f.x1L;f.x1L=yL;f.y2L=f.y1L;f.y1L=nL;f.x2R=f.x1R;f.x1R=yR;f.y2R=f.y1R;f.y1R=nR;yL=nL;yR=nR;}}return{yL,yR};}
-      handleMessage(data){switch(data.type){case'param':this.setParam(data.key,data.value);break;case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;case'geqMaster':this.geqMasterEnabled=data.enabled;break;case'compressor':Object.assign(this.compressor,data.params);break;case'compressorMaster':this.compressorEnabled=data.enabled;break;case'finalLimiter':Object.assign(this.finalLimiter,data.params);break;case'finalLimiterEnabled':this.finalLimiterEnabled=data.enabled;break;case'dynamicEQ':Object.assign(this.dynamicEQ,data.params);break;case'dynamicEQMaster':this.dynamicEQEnabled=data.enabled;break;case'geq16':this.geq16Gains[data.index]=data.value;this.updateGEQ16Coeffs(data.index);break;case'geq16Reset':for(let i=0;i<16;i++){this.geq16Gains[i]=0;this.updateGEQ16Coeffs(i);}break;case'geq16Master':this.geq16Enabled=data.enabled;break;}}
+      handleMessage(data){switch(data.type){case'param':this.setParam(data.key,data.value);break;case'geq':this.geqGains[data.index]=data.value;this.updateGEQCoeffs(data.index);break;case'geqReset':for(let i=0;i<31;i++){this.geqGains[i]=0;this.updateGEQCoeffs(i);}break;case'geqMaster':this.geqMasterEnabled=data.enabled;break;case'compressor':Object.assign(this.compressor,data.params);break;case'compressorMaster':this.compressorEnabled=data.enabled;break;case'dynamicEQ':Object.assign(this.dynamicEQ,data.params);break;case'dynamicEQMaster':this.dynamicEQEnabled=data.enabled;break;case'geq16':this.geq16Gains[data.index]=data.value;this.updateGEQ16Coeffs(data.index);break;case'geq16Reset':for(let i=0;i<16;i++){this.geq16Gains[i]=0;this.updateGEQ16Coeffs(i);}break;case'geq16Master':this.geq16Enabled=data.enabled;break;}}
       setParam(key,value){switch(key){case'inputGain':this.inputGain=Math.pow(10,value/20);break;case'inputPan':this.inputPan=value/100;break;case'outputGain':this.outputGain=Math.pow(10,value/20);break;case'outputLimit':this.outputLimit=value/100;break;case'stereoMode':this.stereoMode=value;break;case'stereoWidth':this.stereoWidth=value/100;break;case'stereoBalance':this.stereoBalance=value/100;break;case'saturation':this.saturationAmount=value;break;}}
       compressSample(signal,threshold,ratio,attack,release,envelope,gain){const absSig=Math.abs(signal);const atkCoeff=Math.exp(-1/(attack*0.001*this.sampleRate));const relCoeff=Math.exp(-1/(release*0.001*this.sampleRate));if(absSig>envelope)envelope=atkCoeff*envelope+(1-atkCoeff)*absSig;else envelope=relCoeff*envelope+(1-relCoeff)*absSig;const linThresh=Math.pow(10,threshold/20);if(envelope>linThresh){const overshoot=envelope/linThresh;const logOvershoot=Math.log10(overshoot);const reduction=Math.pow(10,-logOvershoot*(1-1/ratio));gain=Math.min(gain,reduction);}else{const relSlow=Math.exp(-1/(release*3*0.001*this.sampleRate));gain=Math.min(1,gain+(1-gain)*(1-relSlow));}return{envelope,gain,output:signal*gain};}
       applySaturation(x){if(this.saturationAmount<=0)return x;const s=this.saturationAmount;return Math.tanh(x*(1+s))/Math.tanh(1+s);}
@@ -289,7 +285,6 @@ class BroadcastProcessor {
       compPeakIL=Math.max(compPeakIL,Math.abs(sL));compPeakIR=Math.max(compPeakIR,Math.abs(sR));compRmsIL+=sL*sL;compRmsIR+=sR*sR;
       if(this.compressorEnabled){const c=this.compressor;const mixed=Math.max(Math.abs(sL),Math.abs(sR));const r=this.compressSample(mixed,c.threshold,c.ratio,c.attack,c.release,this.compressor.envelope,this.compressor.g);this.compressor.envelope=r.envelope;this.compressor.g=r.gain;const gainFactor=this.compressor.g*Math.pow(10,c.makeupGain/20);sL*=gainFactor;sR*=gainFactor;}
       compPeakOL=Math.max(compPeakOL,Math.abs(sL));compPeakOR=Math.max(compPeakOR,Math.abs(sR));compRmsOL+=sL*sL;compRmsOR+=sR*sR;this.compGR=20*Math.log10(Math.max(this.compressor.g,1e-10));
-      if(this.finalLimiterEnabled&&this.finalLimiter.enabled){const fl=this.finalLimiter;const mixed=(sL+sR)/2;const r=this.compressSample(mixed,fl.threshold,fl.ratio,fl.attack,fl.release,fl.envelope,fl.g);fl.envelope=r.envelope;fl.g=r.gain;const gf=fl.g*Math.pow(10,fl.gain/20);sL*=gf;sR*=gf;}
       dynEqPeakIL=Math.max(dynEqPeakIL,Math.abs(sL));dynEqPeakIR=Math.max(dynEqPeakIR,Math.abs(sR));dynEqRmsIL+=sL*sL;dynEqRmsIR+=sR*sR;
       if(this.dynamicEQEnabled){const d=this.dynamicEQ;const mixed=Math.max(Math.abs(sL),Math.abs(sR));const r=this.compressSample(mixed,d.threshold,d.ratio,d.attack,d.release,this.dynamicEQ.envelope,this.dynamicEQ.g);this.dynamicEQ.envelope=r.envelope;this.dynamicEQ.g=r.gain;const gainFactor=this.dynamicEQ.g*Math.pow(10,d.gain/20);sL*=gainFactor;sR*=gainFactor;}
       dynEqPeakOL=Math.max(dynEqPeakOL,Math.abs(sL));dynEqPeakOR=Math.max(dynEqPeakOR,Math.abs(sR));dynEqRmsOL+=sL*sL;dynEqRmsOR+=sR*sR;this.dynEqGR=20*Math.log10(Math.max(this.dynamicEQ.g,1e-10));
@@ -320,12 +315,10 @@ class BroadcastProcessor {
     for (let i = 0; i < 31; i++) port.postMessage({ type: 'geq', index: i, value: p.geq[i] });
     for (let i = 0; i < 16; i++) port.postMessage({ type: 'geq16', index: i, value: p.geq16[i] });
     port.postMessage({ type: 'compressor', params: p.compressor });
-    port.postMessage({ type: 'finalLimiter', params: p.finalLimiter });
     port.postMessage({ type: 'dynamicEQ', params: p.dynamicEQ });
-    Object.keys(p).forEach(key => { if (!['geq','geqMaster','geq16','geq16Master','compressor','compressorMaster','finalLimiter','dynamicEQ','dynamicEQMaster','mode','inputDevice','outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
+    Object.keys(p).forEach(key => { if (!['geq','geqMaster','geq16','geq16Master','compressor','compressorMaster','dynamicEQ','dynamicEQMaster','mode','inputDevice','outputDevice'].includes(key)) port.postMessage({ type: 'param', key, value: p[key] }); });
     port.postMessage({ type: 'geqMaster', enabled: p.geqMaster?.enabled ?? true });
     port.postMessage({ type: 'compressorMaster', enabled: p.compressorMaster?.enabled ?? true });
-    port.postMessage({ type: 'finalLimiterEnabled', enabled: p.finalLimiter?.enabled ?? true });
     port.postMessage({ type: 'dynamicEQMaster', enabled: p.dynamicEQMaster?.enabled ?? true });
     port.postMessage({ type: 'geq16Master', enabled: p.geq16Master?.enabled ?? true });
   }
@@ -336,7 +329,6 @@ class BroadcastProcessor {
   sendGEQ16(index, value) { if (!this.audioWorklet) return; this.params.geq16[index] = value; this.audioWorklet.port.postMessage({ type: 'geq16', index, value }); this.updateGEQ16Value(index); }
   resetGEQ16() { this.params.geq16.fill(0); for (let i = 0; i < 16; i++) { this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: 0 }); this.updateGEQ16Value(i); } }
   sendCompressor(params) { if (!this.audioWorklet) return; Object.assign(this.params.compressor, params); this.audioWorklet.port.postMessage({ type: 'compressor', params: this.params.compressor }); }
-  sendFinalLimiter(params) { if (!this.audioWorklet) return; Object.assign(this.params.finalLimiter, params); this.audioWorklet.port.postMessage({ type: 'finalLimiter', params }); }
   sendDynamicEQ(params) { if (!this.audioWorklet) return; Object.assign(this.params.dynamicEQ, params); this.audioWorklet.port.postMessage({ type: 'dynamicEQ', params: this.params.dynamicEQ }); }
 
   updateMeters() {
@@ -410,7 +402,6 @@ class BroadcastProcessor {
     const map = {
       'geq': () => { this.params.geqMaster.enabled = !this.params.geqMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'geqMaster', enabled: this.params.geqMaster.enabled }); },
       'compressor': () => { this.params.compressorMaster.enabled = !this.params.compressorMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'compressorMaster', enabled: this.params.compressorMaster.enabled }); },
-      'finalLimiter': () => { this.params.finalLimiter.enabled = !this.params.finalLimiter.enabled; this.audioWorklet?.port.postMessage({ type: 'finalLimiterEnabled', enabled: this.params.finalLimiter.enabled }); },
       'dynamicEQ': () => { this.params.dynamicEQMaster.enabled = !this.params.dynamicEQMaster.enabled; this.audioWorklet?.port.postMessage({ type: 'dynamicEQMaster', enabled: this.params.dynamicEQMaster.enabled }); },
       'geq16': () => { this.params.geq16Master.enabled = !this.params.geq16Master.enabled; this.audioWorklet?.port.postMessage({ type: 'geq16Master', enabled: this.params.geq16Master.enabled }); }
     };
@@ -481,7 +472,7 @@ class BroadcastProcessor {
     valEl.textContent = (gain > 0 ? '+' : '') + gain.toFixed(1) + ' dB'; valEl.style.color = gain > 0.5 ? '#39ff14' : gain < -0.5 ? '#ff3333' : '#888';
   }
 
-  initKnobs() { this.initStandardKnobs(); this.initCompressorKnobs(); this.initFinalLimiterKnobs(); this.initDynamicEQKnobs(); }
+  initKnobs() { this.initStandardKnobs(); this.initCompressorKnobs(); this.initDynamicEQKnobs(); }
 
   initStandardKnobs() {
     document.querySelectorAll('.knob-wrapper').forEach(wrapper => {
@@ -528,17 +519,6 @@ class BroadcastProcessor {
     this.bindKnobGroup('comp_mkup', 'makeupGain', c.makeupGain, (v) => { this.params.compressor.makeupGain = v; this.sendCompressor({ makeupGain: v }); });
   }
 
-  initFinalLimiterKnobs() {
-    const container = document.getElementById('finalLimiterKnobs'); if (!container) return;
-    const fl = this.params.finalLimiter;
-    container.innerHTML = `<div class="knobs-grid"><div class="knob-container"><div class="knob-wrapper" data-param="fl_thr" data-min="-20" data-max="0" data-default="${fl.threshold}" id="fl_thr"><div class="knob small"></div></div><div class="knob-value">${fl.threshold} dB</div><div class="knob-label">Threshold</div></div><div class="knob-container"><div class="knob-wrapper" data-param="fl_rat" data-min="5" data-max="50" data-default="${fl.ratio}" id="fl_rat"><div class="knob small"></div></div><div class="knob-value">${fl.ratio}:1</div><div class="knob-label">Ratio</div></div><div class="knob-container"><div class="knob-wrapper" data-param="fl_atk" data-min="0.01" data-max="10" data-default="${fl.attack}" id="fl_atk"><div class="knob small"></div></div><div class="knob-value">${fl.attack} ms</div><div class="knob-label">Attack</div></div><div class="knob-container"><div class="knob-wrapper" data-param="fl_rel" data-min="5" data-max="500" data-default="${fl.release}" id="fl_rel"><div class="knob small"></div></div><div class="knob-value">${fl.release} ms</div><div class="knob-label">Release</div></div><div class="knob-container"><div class="knob-wrapper" data-param="fl_gn" data-min="-12" data-max="12" data-default="${fl.gain}" id="fl_gn"><div class="knob small"></div></div><div class="knob-value">${fl.gain > 0 ? '+' : ''}${fl.gain} dB</div><div class="knob-label">Gain</div></div></div>`;
-    this.bindKnobGroup('fl_thr', 'threshold', fl.threshold, (v) => { this.params.finalLimiter.threshold = v; this.sendFinalLimiter({ threshold: v }); });
-    this.bindKnobGroup('fl_rat', 'ratio', fl.ratio, (v) => { this.params.finalLimiter.ratio = v; this.sendFinalLimiter({ ratio: v }); });
-    this.bindKnobGroup('fl_atk', 'attack', fl.attack, (v) => { this.params.finalLimiter.attack = v; this.sendFinalLimiter({ attack: v }); });
-    this.bindKnobGroup('fl_rel', 'release', fl.release, (v) => { this.params.finalLimiter.release = v; this.sendFinalLimiter({ release: v }); });
-    this.bindKnobGroup('fl_gn', 'gain', fl.gain, (v) => { this.params.finalLimiter.gain = v; this.sendFinalLimiter({ gain: v }); });
-  }
-
   initDynamicEQKnobs() {
     const container = document.getElementById('dynamicEQKnobs'); if (!container) return;
     const d = this.params.dynamicEQ;
@@ -576,17 +556,17 @@ class BroadcastProcessor {
   }
 
   presets = {
-    bypass: { name: 'Bypass', geq: new Float32Array(31), geq16: new Float32Array(16), compressor: { threshold: -30, ratio: 2, attack: 50, release: 200, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 1.5, attack: 20, release: 100, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    'fm-hot': { name: 'FM Hot', geq: [0,0.5,1,1.5,2,1.5,1,0.5,0,-0.5,0,0.5,1,1,0.5,0,0,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5,1,1.5,2,2.5], geq16: [0.5,1,1.5,2,1,0.5,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5], compressor: { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 80, gain: 2, enabled: true }, inputGain: 3, outputGain: 0 },
-    'fm-clean': { name: 'FM Clean', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -16, ratio: 2.5, attack: 20, release: 150, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -20, ratio: 2, attack: 15, release: 120, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    streaming: { name: 'Streaming', geq: [0,0,0.5,1,1,0.5,0,0,0,-0.5,0,0,0.5,0.5,0,0,0,0,0.5,1,1,1,0.5,0.5,0.5,0,0,0.5,1,1,1.5], geq16: [0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,1,1,1,0.5,0.5,0.5,0.5,0.5], compressor: { threshold: -14, ratio: 3, attack: 15, release: 120, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -18, ratio: 2, attack: 10, release: 100, gain: 1, enabled: true }, inputGain: 2, outputGain: 0 },
-    podcast: { name: 'Podcast', geq: [0,0,0,0,-1,-2,-2,-1,0,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,-0.5,0.5,1,1.5,1,1,0.5,0,0,0,0,0,0], compressor: { threshold: -18, ratio: 4, attack: 5, release: 80, makeupGain: 6, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -22, ratio: 3, attack: 3, release: 60, gain: 3, enabled: true }, inputGain: 5, outputGain: 0 },
-    voice: { name: 'Voice', geq: [0,0,0,-1,-2,-3,-3,-2,-1,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,0,0.5,1,1.5,1.5,2,1.5,1,0.5,0,0,0,0], compressor: { threshold: -20, ratio: 5, attack: 3, release: 60, makeupGain: 8, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 4, attack: 2, release: 50, gain: 4, enabled: true }, inputGain: 6, outputGain: 0 },
-    music: { name: 'Music', geq: [1,1,1.5,2,2,1.5,1,0.5,0,0,0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2,2,1.5,1,1,1,1,1.5], geq16: [1,1,0.5,0.5,0,0,0,0,0.5,1,1.5,1.5,1,1,0.5,0.5], compressor: { threshold: -10, ratio: 2, attack: 30, release: 200, makeupGain: 2, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -14, ratio: 1.5, attack: 20, release: 150, gain: 1, enabled: true }, inputGain: 0, outputGain: 0 },
-    rock: { name: 'Rock', geq: [3,3,3.5,4,4,3.5,3,2,1,0,-1,-1,0,1,1,0,0,0,0.5,1,1.5,2,2.5,2.5,2.5,2,2,2.5,3,3.5,4], geq16: [2,2,1.5,1,0,0,0.5,1,1.5,2,2.5,2,2,1.5,1,0.5], compressor: { threshold: -14, ratio: 4, attack: 5, release: 80, makeupGain: 5, enabled: true }, finalLimiter: { threshold: -0.5, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 3, attack: 5, release: 60, gain: 3, enabled: true }, inputGain: 3, outputGain: 2 },
-    classical: { name: 'Classical', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -24, ratio: 1.5, attack: 100, release: 500, makeupGain: 0, enabled: true }, finalLimiter: { threshold: -3, ratio: 10, attack: 1, release: 100, gain: 0, enabled: true }, dynamicEQ: { threshold: -26, ratio: 1.2, attack: 50, release: 300, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
-    'bass-boost': { name: 'Bass Boost', geq: [6,6,6,5.5,5,4.5,4,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [4,3.5,2.5,1.5,0.5,0,0,0,0,0,0,0,0,0,0,0], compressor: { threshold: -10, ratio: 3, attack: 15, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -12, ratio: 2.5, attack: 10, release: 80, gain: 2, enabled: true }, inputGain: 0, outputGain: 0 },
-    bright: { name: 'Bright', geq: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4.5,5,5], geq16: [0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2.5,3,3.5], compressor: { threshold: -14, ratio: 3, attack: 10, release: 100, makeupGain: 3, enabled: true }, finalLimiter: { threshold: -1, ratio: 20, attack: 0.5, release: 50, gain: 0, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 70, gain: 3, enabled: true }, inputGain: 0, outputGain: 0 }
+    bypass: { name: 'Bypass', geq: new Float32Array(31), geq16: new Float32Array(16), compressor: { threshold: -30, ratio: 2, attack: 50, release: 200, makeupGain: 0, enabled: true }, dynamicEQ: { threshold: -24, ratio: 1.5, attack: 20, release: 100, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    'fm-hot': { name: 'FM Hot', geq: [0,0.5,1,1.5,2,1.5,1,0.5,0,-0.5,0,0.5,1,1,0.5,0,0,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5,1,1.5,2,2.5], geq16: [0.5,1,1.5,2,1,0.5,0.5,1,1.5,2,2.5,2,1.5,1,0.5,0.5], compressor: { threshold: -12, ratio: 3, attack: 10, release: 100, makeupGain: 4, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 80, gain: 2, enabled: true }, inputGain: 3, outputGain: 0 },
+    'fm-clean': { name: 'FM Clean', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -16, ratio: 2.5, attack: 20, release: 150, makeupGain: 2, enabled: true }, dynamicEQ: { threshold: -20, ratio: 2, attack: 15, release: 120, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    streaming: { name: 'Streaming', geq: [0,0,0.5,1,1,0.5,0,0,0,-0.5,0,0,0.5,0.5,0,0,0,0,0.5,1,1,1,0.5,0.5,0.5,0,0,0.5,1,1,1.5], geq16: [0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,1,1,1,0.5,0.5,0.5,0.5,0.5], compressor: { threshold: -14, ratio: 3, attack: 15, release: 120, makeupGain: 3, enabled: true }, dynamicEQ: { threshold: -18, ratio: 2, attack: 10, release: 100, gain: 1, enabled: true }, inputGain: 2, outputGain: 0 },
+    podcast: { name: 'Podcast', geq: [0,0,0,0,-1,-2,-2,-1,0,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,-0.5,0.5,1,1.5,1,1,0.5,0,0,0,0,0,0], compressor: { threshold: -18, ratio: 4, attack: 5, release: 80, makeupGain: 6, enabled: true }, dynamicEQ: { threshold: -22, ratio: 3, attack: 3, release: 60, gain: 3, enabled: true }, inputGain: 5, outputGain: 0 },
+    voice: { name: 'Voice', geq: [0,0,0,-1,-2,-3,-3,-2,-1,0,0,1,2,3,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [-2,-1.5,-1,0,0.5,1,1.5,1.5,2,1.5,1,0.5,0,0,0,0], compressor: { threshold: -20, ratio: 5, attack: 3, release: 60, makeupGain: 8, enabled: true }, dynamicEQ: { threshold: -24, ratio: 4, attack: 2, release: 50, gain: 4, enabled: true }, inputGain: 6, outputGain: 0 },
+    music: { name: 'Music', geq: [1,1,1.5,2,2,1.5,1,0.5,0,0,0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2,2,1.5,1,1,1,1,1.5], geq16: [1,1,0.5,0.5,0,0,0,0,0.5,1,1.5,1.5,1,1,0.5,0.5], compressor: { threshold: -10, ratio: 2, attack: 30, release: 200, makeupGain: 2, enabled: true }, dynamicEQ: { threshold: -14, ratio: 1.5, attack: 20, release: 150, gain: 1, enabled: true }, inputGain: 0, outputGain: 0 },
+    rock: { name: 'Rock', geq: [3,3,3.5,4,4,3.5,3,2,1,0,-1,-1,0,1,1,0,0,0,0.5,1,1.5,2,2.5,2.5,2.5,2,2,2.5,3,3.5,4], geq16: [2,2,1.5,1,0,0,0.5,1,1.5,2,2.5,2,2,1.5,1,0.5], compressor: { threshold: -14, ratio: 4, attack: 5, release: 80, makeupGain: 5, enabled: true }, dynamicEQ: { threshold: -12, ratio: 3, attack: 5, release: 60, gain: 3, enabled: true }, inputGain: 3, outputGain: 2 },
+    classical: { name: 'Classical', geq: new Float32Array(31).fill(0), geq16: new Float32Array(16).fill(0), compressor: { threshold: -24, ratio: 1.5, attack: 100, release: 500, makeupGain: 0, enabled: true }, dynamicEQ: { threshold: -26, ratio: 1.2, attack: 50, release: 300, gain: 0, enabled: true }, inputGain: 0, outputGain: 0 },
+    'bass-boost': { name: 'Bass Boost', geq: [6,6,6,5.5,5,4.5,4,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], geq16: [4,3.5,2.5,1.5,0.5,0,0,0,0,0,0,0,0,0,0,0], compressor: { threshold: -10, ratio: 3, attack: 15, release: 100, makeupGain: 3, enabled: true }, dynamicEQ: { threshold: -12, ratio: 2.5, attack: 10, release: 80, gain: 2, enabled: true }, inputGain: 0, outputGain: 0 },
+    bright: { name: 'Bright', geq: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,4.5,5,5], geq16: [0,0,0,0,0,0,0,0,0,0.5,1,1.5,2,2.5,3,3.5], compressor: { threshold: -14, ratio: 3, attack: 10, release: 100, makeupGain: 3, enabled: true }, dynamicEQ: { threshold: -16, ratio: 2.5, attack: 5, release: 70, gain: 3, enabled: true }, inputGain: 0, outputGain: 0 }
   };
 
   loadPreset(name) {
@@ -596,7 +576,6 @@ class BroadcastProcessor {
     if (preset.geq16 && preset.geq16.length === 16) { for (let i = 0; i < 16; i++) { const val = typeof preset.geq16[i] === 'number' ? preset.geq16[i] : 0; this.params.geq16[i] = val; this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: val }); this.updateGEQ16Value(i); } }
     else { this.params.geq16.fill(0); for (let i = 0; i < 16; i++) { this.audioWorklet?.port.postMessage({ type: 'geq16', index: i, value: 0 }); this.updateGEQ16Value(i); } }
     if (preset.compressor) { this.params.compressor = { ...this.params.compressor, ...preset.compressor }; this.audioWorklet?.port.postMessage({ type: 'compressor', params: this.params.compressor }); }
-    if (preset.finalLimiter) { this.params.finalLimiter = { ...this.params.finalLimiter, ...preset.finalLimiter }; this.sendFinalLimiter(preset.finalLimiter); }
     if (preset.dynamicEQ) { this.params.dynamicEQ = { ...this.params.dynamicEQ, ...preset.dynamicEQ }; this.sendDynamicEQ(preset.dynamicEQ); }
     if (preset.inputGain !== undefined) { this.sendParam('inputGain', preset.inputGain); this.params.inputGain = preset.inputGain; }
     if (preset.outputGain !== undefined) { this.sendParam('outputGain', preset.outputGain); this.params.outputGain = preset.outputGain; }
